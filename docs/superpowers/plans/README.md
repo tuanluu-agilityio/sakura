@@ -81,7 +81,7 @@ interface WorldContext {
 }
 interface Feature { name: string; init(ctx: WorldContext): void | Promise<void>; update?(dt: number, elapsed: number): void; setQuality?(p: QualityProfile): void; dispose?(): void; }
 ```
-- Feature registration order lives in `src/features/index.ts` (array). Each milestone task appends its feature there (merge conflicts there are trivial; resolve by keeping all lines).
+- Feature registration order lives in `src/features/index.ts` (array); M1 fixes the base order `sky, postfx, fuji, terrain, sakura-trees, petals` (terrain before anything reading `ctx.terrain` at init); later features append after `petals`. Each milestone task appends its feature there (merge conflicts there are trivial; resolve by keeping all lines).
 - Shared modules (not features): `src/shared/toon.ts` (`createToonMaterial(opts: { color: THREE.ColorRepresentation; map?: THREE.Texture; rim?: THREE.ColorRepresentation; }): THREE.Material` — stub in M0, upgraded in M1-T1, signature frozen), `src/shared/characters.ts` (M1-T7), `src/shared/train-schedule.ts` (M2-T2; `trainStateAt(t)` used by train, railway, audio, intro), `src/shared/i18n.ts` (M5-T2).
 - Debug/test hook `window.__sakura = { ready, mode, quality, fps, setMode(m) }` (M0-T2). URL params: `?debug=1` overlay, `?quality=low|medium|high` forces a level (no auto downgrade).
 - Quality resolution (M0-T2): URL param > `settings.quality` if not `'auto'` (manual ⇒ auto-downgrade disabled) > auto.
@@ -89,7 +89,7 @@ interface Feature { name: string; init(ctx: WorldContext): void | Promise<void>;
 ## World layout (`src/core/layout.ts`, created in M0-T3; units metres, +x east, −z north toward Fuji)
 - Walkable bounds: x,z ∈ [−80, 80]; soft boundary (hills + hedge colliders) just outside.
 - Player spawn `(0, 0, 30)` heading north (facing −z).
-- Main tree on mound: centre `(0, 0)`, mound radius 9 m, height 1.8 m. Bench `(0, −3.2)` facing south (+z), length 2 m.
+- Main tree on mound: centre `(0, 0)`, mound radius 9 m, height 1.8 m. Bench `(0, 3.2)` (just south of the trunk, on the mound) facing south (+z), length 2 m; the tree is behind/above the couple.
 - Secondary trees: 12 fixed positions listed in layout (path rows along the dirt path + scattered), min 6 m from each other.
 - Dirt path: polyline `(0,80)→(0,12)→(10,−20)→(10,−48)` (to crossing), width 2.4 m.
 - Railway: straight along x at `z = −40`, embankment top height 1.4 m, width 6 m, track from x −400 to 400. Fences both sides z −37 / −43 except gap at crossing x ∈ [8, 12]. Crossing centre `(10, −40)`.
@@ -115,6 +115,7 @@ Escalation: 2 failed attempts (red CI or review reject) → re-dispatch on next 
 - [ ] steps (TDD where logic exists) …
 **Acceptance:** bullet list (must include: typecheck, unit tests, build, e2e smoke, screenshot attached to PR for visual tasks)
 ```
+Milestones run in order: a milestone starts only after the previous milestone exit. `Depends: none` = no dependency inside the milestone; explicit cross-milestone ids are informational.
 `tools/plan-sync` parses exactly `### Task M<m>-T<n>: <title>` headings and the `**Model:** … **Depends:** …` line. Do not change this format.
 
 ## Orchestrator runbook (main session, Opus)
