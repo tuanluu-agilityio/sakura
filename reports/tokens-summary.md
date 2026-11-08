@@ -4,21 +4,21 @@ Giá tham chiếu kiểm tra ngày 2026-11-08. Chi phí tính bằng USD theo b�
 
 ## Tổng
 
-- Tổng chi phí: $18.09
-- Tổng token (input + output + cache): 37,377,878
+- Tổng chi phí: $18.72
+- Tổng token (input + output + cache): 40,036,658
 - Số task có dữ liệu: 6
 
 ## Theo milestone
 
 | Milestone | Số task | Chi phí |
 |---|---|---|
-| M0 | 6 | $7.09 |
+| M0 | 6 | $7.16 |
 
 ## Theo loại task × model (chi phí trung bình mỗi task)
 
 | Loại task | Vai trò | Model | Số task | Tổng | TB / task |
 |---|---|---|---|---|---|
-| devops | implement | sonnet | 3 | $3.07 | $1.02 |
+| devops | implement | sonnet | 3 | $3.13 | $1.04 |
 | devops | review | sonnet | 3 | $0.91 | $0.30 |
 | feature-logic | implement | opus | 1 | $1.48 | $1.48 |
 | feature-logic | implement | sonnet | 1 | $0.53 | $0.53 |
@@ -31,14 +31,14 @@ Giá tham chiếu kiểm tra ngày 2026-11-08. Chi phí tính bằng USD theo b�
 | Dự kiến | Thực tế | Số task | TB / task |
 |---|---|---|---|
 | opus | opus | 1 | $1.48 |
-| sonnet | sonnet | 5 | $0.80 |
+| sonnet | sonnet | 5 | $0.82 |
 
 ## 5 task tốn kém nhất
 
 | Task | Model | Chi phí |
 |---|---|---|
+| M0-T5 | sonnet | $1.69 |
 | M0-T2 | mixed | $1.68 |
-| M0-T5 | sonnet | $1.62 |
 | M0-T6 | sonnet | $1.61 |
 | M0-T3 | sonnet | $0.76 |
 | M0-T4 | sonnet | $0.75 |
@@ -49,7 +49,7 @@ _Không có._
 
 ## Review
 
-- Tỷ trọng review: $1.60 / $7.09 chi phí task (22.5%)
+- Tỷ trọng review: $1.60 / $7.16 chi phí task (22.3%)
 
 ## Model chưa có giá (tính $0)
 
@@ -57,6 +57,6 @@ _Không có._
 
 ## Orchestration
 
-- Chi phí orchestration: $11.00 (60.8% tổng)
+- Chi phí orchestration: $11.56 (61.8% tổng)
 
 > Lưu ý: chỉ tính phiên trên máy này.
