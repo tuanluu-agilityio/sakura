@@ -3,11 +3,10 @@ Milestone: M1
 Updated: 2026-11-08
 
 ## In progress
-- M1 wave 1: #10 M1-T1 (wt 10), #13 M1-T4 (wt 13), #14 M1-T5 (wt 14), #16 M1-T7 (wt 16) — worktrees at ../sakura-wt/<N>; ledger .superpowers/sdd/M1-static-scene/progress.md
+- #15 M1-T6 petals (wt ../sakura-wt/15, PR pending). Merged: #10 #11 #12 #13 #14 #16 (PRs 46-51,47). Ledger .superpowers/sdd/M1-static-scene/progress.md
 
 ## Ready next
-- M1 wave 2: M1-T2 sky, M1-T3 Fuji, M1-T6 petals; then M1-T8 integration review
-- Plan: docs/superpowers/plans/M1-static-scene.md (read only the task you dispatch)
+- After #15 merges: M1-T8 integration review (#17, opus). Rulings for T8 in ledger (intro framing of Fuji, renderer.info.autoReset, shared SUN_DIR).
 
 ## Blocked
 - none (owner configures Netlify themselves; M0 checkpoint waived 2026-11-08)
