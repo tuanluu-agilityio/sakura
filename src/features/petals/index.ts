@@ -77,6 +77,7 @@ const feature: Feature = {
   dispose() {
     media?.removeEventListener('change', onReducedChange);
     media = null;
+    reduced = false;
     falling = free(falling);
     ground = free(ground);
     uniforms.uInfluence.value.set(0, 0, 0, 0);
