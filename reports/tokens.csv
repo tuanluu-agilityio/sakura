@@ -1,0 +1,8 @@
+taskId,issue,milestone,type,modelPlanned,model,runs,input,output,cacheWrite,cacheRead,costUsd
+M0-T1,1,M0,scaffold,sonnet,sonnet,2,50,15900,118227,1107202,0.6761
+M0-T2,2,M0,feature-logic,opus,mixed,2,76,36439,135875,2264623,1.6842
+M0-T3,3,M0,feature-logic,sonnet,sonnet,2,38,23787,95052,862170,0.6480
+M0-T4,4,M0,devops,sonnet,sonnet,2,62,18764,89110,1691276,0.7488
+M0-T5,5,M0,devops,sonnet,sonnet,1,34,14402,94159,1580346,0.6956
+M0-T6,6,M0,devops,sonnet,sonnet,1,28,9568,129368,1510006,0.7212
+orchestration,,,,,mixed,5,312,209396,884746,16181753,9.7194
