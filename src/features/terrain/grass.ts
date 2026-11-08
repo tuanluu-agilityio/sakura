@@ -2,6 +2,7 @@ import {
   BufferGeometry, Color, DoubleSide, Float32BufferAttribute, InstancedMesh, Matrix4, Quaternion,
   ShaderMaterial, Vector2, Vector3, Euler, type Scene,
 } from 'three';
+import { LAYOUT } from '../../core/layout';
 import { PALETTE } from '../../core/palette';
 import type { WindState } from '../../core/types';
 import fragmentShader from './grass.frag.glsl?raw';
@@ -82,7 +83,8 @@ export function createGrass({ scene, wind, count = grassCount }: GrassOptions) {
   };
   let mesh: InstancedMesh | null = null;
 
-  const accept = (x: number, z: number): boolean => surfaceAt(x, z) === 'grass';
+  const accept = (x: number, z: number): boolean =>
+    Math.abs(z - LAYOUT.railway.z) >= LAYOUT.railway.width / 2 + 0.5 && surfaceAt(x, z) === 'grass';
 
   function teardown(): void {
     if (!mesh) return;

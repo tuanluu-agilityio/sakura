@@ -11,7 +11,7 @@ describe('heightAt', () => {
   });
   it('embankment top and ramp', () => {
     expect(Math.abs(heightAt(30, -40) - 1.4)).toBeLessThanOrEqual(0.05);
-    const ramp = heightAt(30, -37.5);
+    const ramp = heightAt(30, -35);
     expect(ramp).toBeGreaterThan(0);
     expect(ramp).toBeLessThan(1.4);
   });

@@ -6,8 +6,9 @@ const NOISE_WAVELENGTH = 25;
 const FADE = 4; // noise fades to 0 within this distance of path/mound/embankment/stream
 const BANK = 1; // stream bank falloff
 const BRIDGE_BLEND = 1.2; // channel fades back in this far from the bridge rect
-const EMBANK_FLAT = 2; // half width of the flat rail bed
 const EMBANK_RAMP = 3; // ramp length down to ground
+
+const EMBANK_FLAT = LAYOUT.railway.width / 2; // half width of the flat rail bed
 
 export function smoothstep(a: number, b: number, x: number): number {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
