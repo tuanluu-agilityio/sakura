@@ -78,7 +78,7 @@ export const LAYOUT = {
     openAfter: 3, // and opens this many seconds after the tail clears
   },
   intro: {
-    from: { x: 18, y: 6, z: 22 },
+    from: { x: 4, y: 4, z: 30 },
     to: { x: 6, y: 2.5, z: 9 },
     lookAt: { x: 0, y: 2.3, z: 3.2 }, // bench
     duration: 14,

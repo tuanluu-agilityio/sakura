@@ -8,7 +8,7 @@ import { CopyShader } from 'three/addons/shaders/CopyShader.js';
 import vignetteFrag from './vignette.frag.glsl?raw';
 
 export const POSTFX_CONSTANTS = {
-  bloom: { strength: 0.35, radius: 0.6, threshold: 0.85 },
+  bloom: { strength: 0.25, radius: 0.6, threshold: 0.92 },
   vignette: { darkness: 0.28, offset: 1.1 },
 } as const;
 

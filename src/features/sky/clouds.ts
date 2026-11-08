@@ -45,7 +45,7 @@ export function createClouds(): Clouds {
   const geometry = new THREE.PlaneGeometry(1, 1);
   const map = radialTexture();
   const material = new THREE.ShaderMaterial({
-    uniforms: { uMap: { value: map }, uOpacity: { value: 0.85 }, uOffset: { value: 0 } },
+    uniforms: { uMap: { value: map }, uOpacity: { value: 0.65 }, uOffset: { value: 0 } },
     vertexShader: VERT,
     fragmentShader: FRAG,
     transparent: true,

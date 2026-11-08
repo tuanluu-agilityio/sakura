@@ -10,8 +10,8 @@ describe('toonBand', () => {
     for (let i = 1; i < values.length; i++) expect(values[i]!).toBeGreaterThanOrEqual(values[i - 1]!);
   });
 
-  it('has a floor-lit minimum of 0.3 (never black)', () => {
-    expect(toonBand(-1)).toBe(0.3);
+  it('has a floor-lit minimum of 0.5 (never black)', () => {
+    expect(toonBand(-1)).toBe(0.5);
   });
 
   it('has exactly 3 plateaus when sampled at 200 points', () => {
@@ -27,9 +27,9 @@ describe('toonBand', () => {
 });
 
 describe('fogRange', () => {
-  it('maps viewDistance 220 to near 77, far 220', () => {
+  it('maps viewDistance 220 to near 48.4, far 220', () => {
     const r = fogRange(220);
-    expect(r.near).toBeCloseTo(77, 6);
+    expect(r.near).toBeCloseTo(48.4, 6);
     expect(r.far).toBe(220);
   });
 });

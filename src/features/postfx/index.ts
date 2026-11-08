@@ -28,9 +28,12 @@ const postfx: Feature = {
     // Wrap render once. Nested calls (RenderPass, fullscreen quads) and foreign scenes go straight to the original.
     const base = renderer.render;
     original = base;
+    // Each internal pass would otherwise reset the counters; count a whole composited frame instead.
+    renderer.info.autoReset = false;
     renderer.render = (s: Object3D, cam: Camera): void => {
       if (rendering || !fx || s !== scene) return base.call(renderer, s, cam);
       rendering = true;
+      renderer.info.reset();
       try {
         fx.render(cam);
       } finally {
@@ -53,6 +56,7 @@ const postfx: Feature = {
     window.removeEventListener('resize', onResize);
     window.removeEventListener('orientationchange', onResize);
     if (original) ctx.renderer.render = original;
+    ctx.renderer.info.autoReset = true;
     removeFog(ctx.scene, fog);
     fx?.dispose();
     ctx = null;

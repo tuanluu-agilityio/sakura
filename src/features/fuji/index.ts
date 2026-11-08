@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { LAYOUT } from '../../core/layout';
 import { PALETTE } from '../../core/palette';
 import type { Feature } from '../../core/types';
+import { SUN_DIR } from '../../shared/sun';
 import { buildFujiGeometry } from './geometry';
 import frag from './fuji.frag.glsl?raw';
 import vert from './fuji.vert.glsl?raw';
@@ -24,8 +25,7 @@ const feature: Feature = {
         uSnow: { value: new THREE.Color(PALETTE.snow) },
         uHorizon: { value: new THREE.Color(PALETTE.skyHorizon) },
         uShadow: { value: new THREE.Color(PALETTE.shadowTint) },
-        // Local copy of the sun direction (-0.5, 0.45, -0.3) normalised; features never import each other.
-        uSunDir: { value: new THREE.Vector3(-0.5, 0.45, -0.3).normalize() },
+        uSunDir: { value: SUN_DIR },
         uHaze: { value: 0.35 },
         fogExempt: { value: 1 },
       },
