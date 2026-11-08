@@ -14,7 +14,7 @@
     "budget": "node tools/budget/main.ts",
     "tokens": "node -e \"console.log('not implemented yet (M0-T4..T6)')\"",
     "resume": "node -e \"console.log('not implemented yet (M0-T4..T6)')\"",
-    "plan:sync": "node -e \"console.log('not implemented yet (M0-T4..T6)')\""
+    "plan:sync": "node tools/plan-sync/main.ts"
   },
   "dependencies": {
     "three": "0.187.0"
