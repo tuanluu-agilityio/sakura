@@ -12,7 +12,7 @@
     "test": "vitest run",
     "e2e": "playwright test",
     "budget": "node tools/budget/main.ts",
-    "tokens": "node -e \"console.log('not implemented yet (M0-T4..T6)')\"",
+    "tokens": "node tools/token-report/main.ts",
     "resume": "node tools/resume/main.ts",
     "plan:sync": "node tools/plan-sync/main.ts"
   },
