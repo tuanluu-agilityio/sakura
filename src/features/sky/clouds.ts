@@ -7,10 +7,12 @@ const WRAP = 900;
 const VERT = /* glsl */ `
 uniform float uOffset;
 varying vec2 vUv;
+varying float vFade;
 void main() {
   vUv = uv;
   vec3 c = instanceMatrix[3].xyz;
   c.x = mod(c.x + uOffset + ${WRAP}.0, ${2 * WRAP}.0) - ${WRAP}.0;
+  vFade = 1.0 - smoothstep(${WRAP - 200}.0, ${WRAP}.0, abs(c.x));
   vec4 mv = viewMatrix * vec4(c, 1.0);
   mv.xy += position.xy * vec2(instanceMatrix[0][0], instanceMatrix[1][1]);
   gl_Position = projectionMatrix * mv;
@@ -19,8 +21,9 @@ const FRAG = /* glsl */ `
 uniform sampler2D uMap;
 uniform float uOpacity;
 varying vec2 vUv;
+varying float vFade;
 void main() {
-  gl_FragColor = vec4(1.0, 1.0, 1.0, texture2D(uMap, vUv).a * uOpacity);
+  gl_FragColor = vec4(1.0, 1.0, 1.0, texture2D(uMap, vUv).a * uOpacity * vFade);
 }`;
 
 function radialTexture(): THREE.CanvasTexture {

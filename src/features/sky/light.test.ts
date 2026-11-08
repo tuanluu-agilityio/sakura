@@ -14,5 +14,6 @@ describe('sky light constants', () => {
   it('shadowFrustum snaps the centre to a 1 m grid', () => {
     expect(shadowFrustum({ x: 0.4, z: 0.6 }, 60)).toEqual({ cx: 0, cz: 1 });
     expect(shadowFrustum({ x: -3.6, z: 7.2 }, 60)).toEqual({ cx: -4, cz: 7 });
+    expect(shadowFrustum({ x: -0.4, z: 0.2 }, 60)).toEqual({ cx: 0, cz: 0 });
   });
 });

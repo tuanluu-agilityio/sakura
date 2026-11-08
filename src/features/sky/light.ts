@@ -11,8 +11,14 @@ export const SHADOW = { bias: -0.0004, normalBias: 0.04, halfExtent: 60 };
 const SUN_DISTANCE = 120;
 
 /** Snap the shadow-frustum centre to a 1 m grid so shadows do not shimmer while the player moves. */
-export function shadowFrustum(playerPos: { x: number; z: number }, _halfExtent: number): { cx: number; cz: number } {
-  return { cx: Math.round(playerPos.x), cz: Math.round(playerPos.z) };
+export function shadowFrustum(
+  playerPos: { x: number; z: number },
+  _halfExtent: number,
+  out: { cx: number; cz: number } = { cx: 0, cz: 0 },
+): { cx: number; cz: number } {
+  out.cx = Math.round(playerPos.x) || 0; // `|| 0` turns -0 into 0
+  out.cz = Math.round(playerPos.z) || 0;
+  return out;
 }
 
 export interface SkyLight { update(): void; setQuality(p: QualityProfile): void; dispose(): void }
@@ -31,8 +37,9 @@ export function createLight(ctx: WorldContext): SkyLight {
   const hemi = new THREE.HemisphereLight(HEMI.sky, HEMI.ground, HEMI.intensity);
   ctx.scene.add(sun, sun.target, hemi);
 
+  const centre = { cx: 0, cz: 0 };
   const update = (): void => {
-    const { cx, cz } = shadowFrustum(ctx.player.position, SHADOW.halfExtent);
+    const { cx, cz } = shadowFrustum(ctx.player.position, SHADOW.halfExtent, centre);
     sun.target.position.set(cx, 0, cz);
     sun.position.set(cx, 0, cz).addScaledVector(SUN_DIR, SUN_DISTANCE);
     sun.target.updateMatrixWorld();
@@ -42,6 +49,7 @@ export function createLight(ctx: WorldContext): SkyLight {
   return {
     update,
     setQuality(p) {
+      if (sun.shadow.mapSize.x === p.shadowMapSize) return;
       sun.shadow.map?.dispose();
       sun.shadow.map = null;
       sun.shadow.mapSize.set(p.shadowMapSize, p.shadowMapSize);
