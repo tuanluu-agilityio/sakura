@@ -4,12 +4,15 @@ import { createDebugOverlay } from './core/debug';
 import { createLoop } from './core/loop';
 import { FpsMonitor, QUALITY_PROFILES, lowerLevel } from './core/quality';
 import { resizeRenderer } from './core/renderer';
-import type { GameMode, QualityLevel } from './core/types';
+import { LAYOUT } from './core/layout';
+import type { GameMode, QualityLevel, WorldContext } from './core/types';
 import { features } from './features';
 
 declare global {
   interface Window {
-    __sakura?: { ready: boolean; readonly mode: GameMode; readonly quality: QualityLevel; readonly fps: number; setMode(m: GameMode): void };
+    __sakura?: { ready: boolean; readonly mode: GameMode; readonly quality: QualityLevel; readonly fps: number; setMode(m: GameMode): void;
+      /** `?debug=1` only: live context and runtime quality switch for e2e tests. */
+      ctx?: WorldContext; setQuality?(level: QualityLevel): void };
   }
 }
 
@@ -22,6 +25,11 @@ async function boot(): Promise<void> {
   let autoQuality = currentQuality(ctx.settings.get()).auto;
   let monitor = new FpsMonitor(isTouchDevice());
   let fps = 0;
+
+  // Static intro pose until the camera feature (M2) takes over.
+  const { from, lookAt } = LAYOUT.intro;
+  camera.position.set(from.x, from.y, from.z);
+  camera.lookAt(lookAt.x, lookAt.y, lookAt.z);
 
   const resize = (): void => resizeRenderer(renderer, camera, ctx.quality);
   resize();
@@ -76,6 +84,10 @@ async function boot(): Promise<void> {
     get fps() { return fps; },
     setMode: (m) => ctx.setMode(m),
   };
+  if (new URLSearchParams(location.search).get('debug') === '1') {
+    window.__sakura.ctx = ctx;
+    window.__sakura.setQuality = applyQuality;
+  }
 }
 
 boot().catch((err: unknown) => {
