@@ -3,15 +3,14 @@ Milestone: M1
 Updated: 2026-11-08
 
 ## In progress
-- none
+- M1 wave 1: #10 M1-T1 (wt 10), #13 M1-T4 (wt 13), #14 M1-T5 (wt 14), #16 M1-T7 (wt 16) — worktrees at ../sakura-wt/<N>; ledger .superpowers/sdd/M1-static-scene/progress.md
 
 ## Ready next
-- M1 wave 1 (≤4 parallel): M1-T1 toon+postfx (opus), M1-T4 terrain (sonnet), M1-T5 sakura trees (opus), M1-T7 characters (sonnet)
 - M1 wave 2: M1-T2 sky, M1-T3 Fuji, M1-T6 petals; then M1-T8 integration review
 - Plan: docs/superpowers/plans/M1-static-scene.md (read only the task you dispatch)
 
 ## Blocked
-- M0 human checkpoint: owner connects Netlify to the repo and confirms the empty pastel scene + `npm run tokens`. Start M1 only after the owner says go.
+- none (owner configures Netlify themselves; M0 checkpoint waived 2026-11-08)
 
 ## Notes
 - M0 done: #1-#6 merged (PRs #7,#8,#9,#43,#44,#45). Tokens: reports/tokens-summary.md
