@@ -1,0 +1,30 @@
+{
+  "name": "sakura",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "e2e": "playwright test",
+    "budget": "node tools/budget/main.ts",
+    "tokens": "node -e \"console.log('not implemented yet (M0-T4..T6)')\"",
+    "resume": "node -e \"console.log('not implemented yet (M0-T4..T6)')\"",
+    "plan:sync": "node -e \"console.log('not implemented yet (M0-T4..T6)')\""
+  },
+  "dependencies": {
+    "three": "0.187.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.0",
+    "@types/node": "26.6.6",
+    "@types/three": "0.187.0",
+    "typescript": "7.0.2",
+    "vite": "8.3.6",
+    "vitest": "5.1.0"
+  }
+}
