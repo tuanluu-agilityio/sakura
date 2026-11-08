@@ -13,7 +13,7 @@ declare global {
   interface Window {
     __sakura?: { ready: boolean; readonly mode: GameMode; readonly quality: QualityLevel; readonly fps: number; setMode(m: GameMode): void;
       /** `?debug=1` only: live context and runtime quality switch for e2e tests. */
-      ctx?: WorldContext; setQuality?(level: QualityLevel): void;
+      ctx?: WorldContext; setQuality?(level: QualityLevel): void; setTime?(t: number): void;
       characters?: { load(id: 'player' | 'boy' | 'girl'): Promise<CharacterRig>; resolve(names: string[], want: ClipName): string; stage(): Promise<() => void> } };
   }
 }
@@ -57,7 +57,11 @@ async function boot(): Promise<void> {
   for (const f of features) await f.init(ctx);
 
   const updateDebug = createDebugOverlay(ctx, () => fps);
-  const loop = createLoop((dt, elapsed) => {
+  let timeOffset = 0; // `?debug=1` setTime only
+  let loopElapsed = 0;
+  const loop = createLoop((dt, rawElapsed) => {
+    loopElapsed = rawElapsed;
+    const elapsed = rawElapsed + timeOffset;
     ctx.time.elapsed = elapsed;
     // Ignore sub-millisecond dt: the first rAF can land right after loop start and would seed fps with a huge 1/dt.
     if (dt > 0.001) fps = fps === 0 ? 1 / dt : fps * 0.9 + (1 / dt) * 0.1;
@@ -90,6 +94,7 @@ async function boot(): Promise<void> {
   if (new URLSearchParams(location.search).get('debug') === '1') {
     window.__sakura.ctx = ctx;
     window.__sakura.setQuality = applyQuality;
+    window.__sakura.setTime = (t) => { timeOffset = t - loopElapsed; };
     window.__sakura.characters = { load: (id) => loadCharacter(ctx, id), resolve: resolveClip, stage: async () => (await import('./shared/characterStage')).createCharacterStage(scene) };
   }
 }
