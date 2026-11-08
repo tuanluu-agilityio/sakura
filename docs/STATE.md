@@ -3,10 +3,10 @@ Milestone: M2
 Updated: 2026-11-08
 
 ## In progress
-- M2 wave 1: #19 M2-T2 train, #20 M2-T3 village, #21 M2-T4 couple (worktrees ../sakura-wt/<N>). Ledger .superpowers/sdd/M2-life/progress.md
+- #18 M2-T1 railway: paused by usage limit, uncommitted work in ../sakura-wt/18; resume, then review + merge. Merged: #19 #20 #21. Ledger .superpowers/sdd/M2-life/progress.md
 
 ## Ready next
-- After #19 merges: #18 M2-T1 railway (sonnet); then #22 M2-T5 integration (opus). Briefs in .superpowers/sdd/M2-life/
+- After #18 merges: #22 M2-T5 integration (opus). Brief in .superpowers/sdd/M2-life/
 
 ## Blocked
 - none
