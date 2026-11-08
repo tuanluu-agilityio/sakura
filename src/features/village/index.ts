@@ -1,4 +1,4 @@
-import { BufferAttribute, BufferGeometry, Mesh, type Material, type Object3D } from 'three';
+import { InstancedMesh, type Material, type Object3D } from 'three';
 import { LAYOUT } from '../../core/layout';
 import type { Feature, WorldContext } from '../../core/types';
 import { buildBridge, bridgeColliders } from './bridge';
@@ -6,14 +6,12 @@ import { buildHouses } from './house';
 import { buildLanterns, LANTERN_RADIUS } from './lanterns';
 import { buildPaddies } from './paddies';
 import { HOUSE, placeHouses } from './placement';
-import { WATER_Y, buildRibbon, createStreamMaterial, streamColliders } from './stream';
+import { createStreamMesh, streamColliders } from './stream';
 import { buildTorii, pillarSpots } from './torii';
 
 const HOUSE_SEED = 7;
 const HOUSE_GAP = 12;
 const HOUSE_MARGIN = 4;
-const RIBBON_SEG = 2;
-const RIBBON_EXTRA = 1.4; // visual width beyond LAYOUT.stream.width: the bank ramp hides the water until ~2.2 m from the centreline
 
 let ctx: WorldContext | null = null;
 let objects: Object3D[] = [];
@@ -59,15 +57,7 @@ const feature: Feature = {
     for (const l of LAYOUT.lanterns) collide({ kind: 'circle', x: l.x, z: l.z, r: LANTERN_RADIUS });
 
     // Stream
-    const ribbon = buildRibbon(LAYOUT.stream.points, LAYOUT.stream.width + RIBBON_EXTRA, WATER_Y, RIBBON_SEG);
-    const geo = new BufferGeometry();
-    geo.setAttribute('position', new BufferAttribute(ribbon.positions, 3));
-    geo.setAttribute('uv', new BufferAttribute(ribbon.uvs, 2));
-    geo.setIndex(new BufferAttribute(ribbon.indices, 1));
-    const mat = createStreamMaterial();
-    const water = new Mesh(geo, mat);
-    water.renderOrder = 1;
-    water.name = 'stream';
+    const { mesh: water, geometry: geo, material: mat } = createStreamMesh();
     add(water);
     own(geo, mat);
     timeUniforms.push(mat.uniforms.uTime as { value: number });
@@ -85,7 +75,10 @@ const feature: Feature = {
   },
 
   dispose() {
-    for (const o of objects) o.removeFromParent();
+    for (const o of objects) {
+      o.removeFromParent();
+      if (o instanceof InstancedMesh) o.dispose();
+    }
     for (const d of disposables) d.dispose();
     for (const id of colliderIds) ctx?.colliders.remove(id);
     objects = [];

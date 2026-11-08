@@ -1,7 +1,7 @@
-import { Color, ShaderMaterial, UniformsLib, UniformsUtils } from 'three';
+import { BufferAttribute, BufferGeometry, Color, Mesh, ShaderMaterial, UniformsLib, UniformsUtils } from 'three';
 import { PALETTE } from '../../core/palette';
 import type { Collider } from '../../core/types';
-import type { XZ } from '../../core/layout';
+import { LAYOUT, type XZ } from '../../core/layout';
 import vertexShader from './stream.vert.glsl?raw';
 import fragmentShader from './stream.frag.glsl?raw';
 
@@ -87,4 +87,21 @@ export function createStreamMaterial(): ShaderMaterial {
     polygonOffsetUnits: -2,
     fog: true,
   });
+}
+
+const RIBBON_SEG = 2;
+const RIBBON_EXTRA = 1.4; // visual width beyond LAYOUT.stream.width: the bank ramp hides the water until ~2.2 m from the centreline
+
+/** The stream mesh (renderOrder 1, after opaque geometry) with its owned geometry and material. */
+export function createStreamMesh(): { mesh: Mesh; geometry: BufferGeometry; material: ShaderMaterial } {
+  const ribbon = buildRibbon(LAYOUT.stream.points, LAYOUT.stream.width + RIBBON_EXTRA, WATER_Y, RIBBON_SEG);
+  const geometry = new BufferGeometry();
+  geometry.setAttribute('position', new BufferAttribute(ribbon.positions, 3));
+  geometry.setAttribute('uv', new BufferAttribute(ribbon.uvs, 2));
+  geometry.setIndex(new BufferAttribute(ribbon.indices, 1));
+  const material = createStreamMaterial();
+  const mesh = new Mesh(geometry, material);
+  mesh.renderOrder = 1;
+  mesh.name = 'stream';
+  return { mesh, geometry, material };
 }

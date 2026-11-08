@@ -2,7 +2,6 @@ uniform float uTime;
 uniform vec3 uColor;
 uniform vec3 uFoam;
 varying vec2 vUv;
-varying vec3 vWorld;
 
 #include <fog_pars_fragment>
 

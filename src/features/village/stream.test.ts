@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
+import { Vector3 } from 'three';
+import { createColliders } from '../../core/colliders';
+import { bridgeColliders } from './bridge';
 import { LAYOUT } from '../../core/layout';
 import type { Collider } from '../../core/types';
-import { WATER_Y, buildRibbon, createStreamMaterial, streamColliders } from './stream';
+import { WATER_Y, buildRibbon, createStreamMaterial, createStreamMesh, streamColliders } from './stream';
 
 const { points, width } = LAYOUT.stream;
 const bridge = LAYOUT.bridge;
@@ -52,6 +55,12 @@ describe('water material and level', () => {
     expect(m.transparent).toBe(true);
     expect(m.depthWrite).toBe(false);
   });
+  it('renders after opaque geometry', () => {
+    const { mesh, geometry, material } = createStreamMesh();
+    expect(mesh.renderOrder).toBeGreaterThanOrEqual(1);
+    geometry.dispose();
+    material.dispose();
+  });
   it('sits between bed and bank', () => {
     expect(WATER_Y).toBeGreaterThan(-0.6 + 0.3);
     expect(WATER_Y).toBeLessThan(0 - 0.1);
@@ -77,6 +86,27 @@ describe('streamColliders', () => {
     for (let x = points[0]!.x + 1; x < points[points.length - 1]!.x; x += 2) {
       if (Math.abs(x - bridge.x) < 2.3) continue;
       expect(covered(cs, x, centreZ(x))).toBe(true);
+    }
+  });
+});
+
+describe('bridge pockets are sealed', () => {
+  it('a r=0.35 player cannot wade across beside the rails', () => {
+    const reg = createColliders();
+    for (const c of [...streamColliders(points, width, bridge), ...bridgeColliders()]) reg.add(c);
+    for (const side of [-1, 1]) {
+      for (let off = 1.4; off <= 2.6; off += 0.05) {
+        const x = bridge.x + side * off;
+        const pos = new Vector3(x, 0, centreZ(x) - 5);
+        const prev = new Vector3();
+        for (let z = pos.z; z <= centreZ(x) + 5; z += 0.05) {
+          prev.copy(pos);
+          pos.z = z;
+          reg.resolve(pos, 0.35, prev);
+        }
+        // Allowed to slide sideways, but must not end on the far bank.
+        expect(pos.z, `side ${side} off ${off.toFixed(2)}`).toBeLessThan(centreZ(pos.x));
+      }
     }
   });
 });
