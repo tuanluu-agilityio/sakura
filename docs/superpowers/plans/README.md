@@ -123,7 +123,7 @@ Milestones run in order: a milestone starts only after the previous milestone ex
 
 **Per task:**
 1. Pick ready tasks (deps Done) from current milestone; ≤ 4 concurrent.
-2. Issue `#N` exists (created by `npm run plan:sync`). Set Status=In Progress.
+2. Issue `#N` exists (created by `npm run plan:sync`). Set Status=In Progress (Status options: Todo, In Progress, Done; "in review" = open non-draft PR).
 3. Create worktree: `git worktree add ../sakura-wt/N -b feat/N-<slug> main` (`chore/` for type docs/devops).
 4. Dispatch implementer subagent with `model` = planned model, **description starting `[#N] `**, prompt = the task section verbatim + "Work in <worktree path>. Read CLAUDE.md, src/core/types.ts, your feature folder only. Commit + push after each step; open a draft PR `Closes #N` after the first commit; tick the issue checklist (`gh issue edit` body) as steps complete."
 5. On return: CI green + review (dispatch reviewer on sonnet with description `[#N] review`, uses `/code-review low`; for visual tasks orchestrator also views the PR screenshot vs palette/mockup). Fix loop via same implementer model.
