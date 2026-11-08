@@ -27,7 +27,8 @@ function assertNotBlank(pixels: number[][]): void {
   expect(Math.max(...sums) - Math.min(...sums)).toBeGreaterThan(3);
 }
 
-test('postfx renders at low and medium without console errors', async ({ page }, testInfo) => {
+test('postfx renders toon meshes at low and medium without console or shader errors', async ({ page }, testInfo) => {
+  test.setTimeout(90_000); // heavy scene + bloom on software GL in CI
   const errors: string[] = [];
   page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
   page.on('pageerror', (e) => errors.push(e.message));
@@ -37,14 +38,22 @@ test('postfx renders at low and medium without console errors', async ({ page },
     .poll(() => page.evaluate(() => (window as any).__sakura?.ready), { timeout: 10_000 })
     .toBe(true);
 
+  // The scene must contain toon meshes so a toon shader compile error would surface as a console error.
+  const toonMeshes = await page.evaluate(() => {
+    let n = 0;
+    (window as any).__sakura.ctx.scene.traverse((o: any) => { if (o.isMesh && o.material?.userData?.toon) n++; });
+    return n;
+  });
+  expect(toonMeshes).toBeGreaterThan(0);
+
   for (const level of ['low', 'medium'] as const) {
     await page.evaluate((l) => (window as any).__sakura.setQuality(l), level);
     expect(await page.evaluate(() => (window as any).__sakura.quality)).toBe(level);
     expect(await page.evaluate(() => (window as any).__sakura.ctx.scene.fog?.far)).toBe(level === 'low' ? 220 : 320);
     assertNotBlank(await samplePixels(page));
     await page.waitForTimeout(200);
+    expect(errors, `console errors at ${level}`).toEqual([]);
     await page.screenshot({ path: `test-results/postfx-${level}-${testInfo.project.name}.png` });
   }
-  await page.screenshot({ path: `test-results/postfx-${testInfo.project.name}.png` });
   expect(errors).toEqual([]);
 });
