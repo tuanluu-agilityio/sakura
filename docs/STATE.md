@@ -3,10 +3,10 @@ Milestone: M1
 Updated: 2026-11-08
 
 ## In progress
-- #15 M1-T6 petals (wt ../sakura-wt/15, PR pending). Merged: #10 #11 #12 #13 #14 #16 (PRs 46-51,47). Ledger .superpowers/sdd/M1-static-scene/progress.md
+- #17 M1-T8 integration (wt ../sakura-wt/17). All of #10-#16 merged (PRs 46-52). Ledger .superpowers/sdd/M1-static-scene/progress.md
 
 ## Ready next
-- After #15 merges: M1-T8 integration review (#17, opus). Rulings for T8 in ledger (intro framing of Fuji, renderer.info.autoReset, shared SUN_DIR).
+- After #17 merges: `npm run tokens`, STATE → M2, human checkpoint (composite screenshots) before M2.
 
 ## Blocked
 - none (owner configures Netlify themselves; M0 checkpoint waived 2026-11-08)
