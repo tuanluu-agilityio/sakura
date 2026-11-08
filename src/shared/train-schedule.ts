@@ -26,9 +26,9 @@ export interface TrainState { active: boolean; direction: 1 | -1; frontX: number
 export interface RunEvents { tApproach: number; tClose: number; tPass: number; tClear: number; tOpen: number }
 
 const APPROACH_BEFORE = 10;
-const CLOSE_BEFORE = 8;
+const CLOSE_BEFORE = LAYOUT.train.closeBefore;
 const CLEAR_ZONE = 4;
-const OPEN_AFTER = 3;
+const OPEN_AFTER = LAYOUT.train.openAfter;
 
 export function trainStateAt(t: number, cfg: TrainCfg = TRAIN_CFG): TrainState {
   const tt = Math.max(t + cfg.startOffset, 0);
