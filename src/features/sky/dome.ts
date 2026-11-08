@@ -24,6 +24,7 @@ export function createDome(): Dome {
     fog: false,
   });
   const mesh = new THREE.Mesh(geometry, material);
+  mesh.name = 'sky-dome';
   mesh.renderOrder = -10;
   mesh.frustumCulled = false;
   return {

@@ -10,7 +10,14 @@ test('sky gradient is bluer at the top than at the horizon', async ({ page }, te
     .poll(() => page.evaluate(() => (window as any).__sakura?.ready), { timeout: 10_000 })
     .toBe(true);
   await page.waitForTimeout(500);
-  const png = await page.screenshot({ path: `test-results/sky-${testInfo.project.name}.png` });
+  await page.screenshot({ path: `test-results/sky-${testInfo.project.name}.png` });
+  // The horizon band is covered by terrain and Fuji from the intro pose: sample the dome on its own.
+  await page.evaluate(() => {
+    const { scene } = (window as any).__sakura.ctx;
+    for (const o of scene.children) o.visible = o.name === 'sky-dome';
+  });
+  await page.waitForTimeout(300);
+  const png = await page.screenshot();
 
   const result = await page.evaluate(async (b64) => {
     const img = new Image();

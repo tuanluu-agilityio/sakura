@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 import { PALETTE } from '../../core/palette';
 import type { QualityProfile, WorldContext } from '../../core/types';
+import { SUN_DIR } from '../../shared/sun';
 
-export const SUN_DIR = new THREE.Vector3(-0.5, 0.45, -0.3).normalize();
+export { SUN_DIR };
 export const SUN_COLOR = '#ffe2b8';
 export const SUN_INTENSITY = 2.4;
 export const HEMI = { sky: PALETTE.skyTop, ground: PALETTE.grass, intensity: 0.7 };

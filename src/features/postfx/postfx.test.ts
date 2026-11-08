@@ -9,6 +9,7 @@ import postfx, { activeComposer } from './index';
 function mockRenderer(): WebGLRenderer {
   return {
     render: vi.fn(),
+    info: { autoReset: true, reset: vi.fn() },
     getPixelRatio: () => 1,
     getSize: (v: Vector2) => v.set(800, 600),
     getClearColor: vi.fn(),
@@ -107,7 +108,7 @@ describe('postfx feature', () => {
     await postfx.init(ctx);
     postfx.setQuality!(QUALITY_PROFILES.low);
     const fog = ctx.scene.fog as Fog;
-    expect(fog.near).toBeCloseTo(77, 6);
+    expect(fog.near).toBeCloseTo(48.4, 6);
     expect(fog.far).toBe(220);
   });
 });

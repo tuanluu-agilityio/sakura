@@ -9,11 +9,11 @@ export const TOON_CONSTANTS = {
   /** Full smoothstep width of each band edge. */
   width: 0.06,
   /** Plateau values: floor-lit, mid, fully lit. Floor > 0 so nothing goes black. */
-  levels: [0.3, 0.65, 1.0],
+  levels: [0.5, 0.75, 1.0],
   rimPower: 3,
   rimStrength: 0.6,
   rimMix: 0.35,
-  shadowMix: 0.45,
+  shadowMix: 0.3,
 } as const;
 
 function smoothstep(e0: number, e1: number, x: number): number {
@@ -21,7 +21,7 @@ function smoothstep(e0: number, e1: number, x: number): number {
   return t * t * (3 - 2 * t);
 }
 
-/** Pure TS mirror of `sakuraToonBand` in toon.frag.glsl. `ndl` in [-1, 1], result in [0.3, 1]. */
+/** Pure TS mirror of `sakuraToonBand` in toon.frag.glsl. `ndl` in [-1, 1], result in [0.5, 1]. */
 export function toonBand(ndl: number): number {
   const { bands, width, levels } = TOON_CONSTANTS;
   const h = ndl * 0.5 + 0.5;
@@ -33,7 +33,7 @@ export function toonBand(ndl: number): number {
 
 /** Linear fog range for a quality profile's view distance. */
 export function fogRange(viewDistance: number): { near: number; far: number } {
-  return { near: viewDistance * 0.35, far: viewDistance };
+  return { near: viewDistance * 0.22, far: viewDistance };
 }
 
 const f = (n: number): string => n.toFixed(4);
