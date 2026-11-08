@@ -1,6 +1,7 @@
 import { expect, it } from 'vitest';
 import type { Pricing } from './price.ts';
-import { buildRows, toCsv, toSummary } from './report.ts';
+import { buildRows, toCsv } from './report.ts';
+import { toSummary } from './summary.ts';
 import type { UsageRecord } from './scan.ts';
 
 const pricing: Pricing = {

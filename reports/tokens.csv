@@ -3,6 +3,6 @@ M0-T1,1,M0,scaffold,sonnet,sonnet,2,50,15900,118227,1107202,0.6761,sonnet,0.4252
 M0-T2,2,M0,feature-logic,opus,mixed,2,76,36439,135875,2264623,1.6842,opus,1.4760,1,sonnet,0.2082,1
 M0-T3,3,M0,feature-logic,sonnet,sonnet,2,50,26673,99696,1202438,0.7566,sonnet,0.5263,1,sonnet,0.2303,1
 M0-T4,4,M0,devops,sonnet,sonnet,2,62,18764,89110,1691276,0.7488,sonnet,0.5844,1,sonnet,0.1644,1
-M0-T5,5,M0,devops,sonnet,sonnet,2,64,29439,201145,2901864,1.3778,sonnet,1.0269,1,sonnet,0.3508,1
-M0-T6,6,M0,devops,sonnet,sonnet,2,72,28573,183115,3920041,1.5277,sonnet,1.3204,1,sonnet,0.2073,1
-orchestration,,,,,mixed,5,348,215664,903865,19324841,10.5691,,0.0000,0,,0.0000,0
+M0-T5,5,M0,devops,sonnet,sonnet,2,82,33008,215002,3755480,1.6188,sonnet,1.1606,1,sonnet,0.4582,1
+M0-T6,6,M0,devops,sonnet,sonnet,2,82,30499,193152,4095311,1.6071,sonnet,1.3204,1,sonnet,0.2867,1
+orchestration,,,,,mixed,5,368,217171,911640,21119622,10.9972,,0.0000,0,,0.0000,0

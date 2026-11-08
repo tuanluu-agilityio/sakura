@@ -1,7 +1,8 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { findItemByIssue, setField } from '../gh/project.ts';
 import type { Pricing } from './price.ts';
-import { buildRows, toCsv, toSummary, type TaskMeta } from './report.ts';
+import { buildRows, toCsv, type TaskMeta } from './report.ts';
+import { toSummary } from './summary.ts';
 import { scanLogs } from './scan.ts';
 
 const noProject = process.argv.includes('--no-project');
