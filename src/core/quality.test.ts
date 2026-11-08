@@ -31,6 +31,10 @@ describe('resolveQuality', () => {
   it('falls back to auto', () => {
     expect(resolveQuality({ url: '', setting: 'auto', auto: 'low' })).toEqual({ level: 'low', auto: true });
   });
+  it('treats a non-level setting as auto', () => {
+    const setting = 'ultra' as unknown as 'auto';
+    expect(resolveQuality({ url: '', setting, auto: 'low' })).toEqual({ level: 'low', auto: true });
+  });
   it('ignores invalid URL values', () => {
     expect(resolveQuality({ url: '?quality=ultra', setting: 'auto', auto: 'medium' })).toEqual({ level: 'medium', auto: true });
   });

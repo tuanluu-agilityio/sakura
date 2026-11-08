@@ -33,6 +33,23 @@ describe('createSettings', () => {
     expect(s.get()).toEqual({ ...DEFAULTS, musicVolume: 0.1 });
   });
 
+  it('replaces each invalid stored field with its default', () => {
+    const stored = JSON.stringify({ quality: 'ultra', lang: 'fr', musicVolume: 'loud', ambientVolume: null, muted: 'yes' });
+    const s = createSettings(memoryStorage({ 'sakura.settings': stored }), createBus());
+    expect(s.get()).toEqual(DEFAULTS);
+  });
+
+  it('keeps valid stored fields and clamps volumes to 0..1', () => {
+    const stored = JSON.stringify({ quality: 'high', lang: 'vi', musicVolume: 3, ambientVolume: -1, muted: true, extra: 1 });
+    const s = createSettings(memoryStorage({ 'sakura.settings': stored }), createBus());
+    expect(s.get()).toEqual({ musicVolume: 1, ambientVolume: 0, muted: true, quality: 'high', lang: 'vi' });
+  });
+
+  it('ignores non-object JSON', () => {
+    const s = createSettings(memoryStorage({ 'sakura.settings': '[1,2]' }), createBus());
+    expect(s.get()).toEqual(DEFAULTS);
+  });
+
   it('set persists and emits settings:change once', () => {
     const storage = memoryStorage();
     const bus = createBus();

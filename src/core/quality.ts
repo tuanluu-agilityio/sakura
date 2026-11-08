@@ -20,7 +20,7 @@ export function pickInitialQuality(env: { touch: boolean; cores: number }): Qual
 export function resolveQuality(o: { url: string; setting: Settings['quality']; auto: QualityLevel }): { level: QualityLevel; auto: boolean } {
   const fromUrl = new URLSearchParams(o.url).get('quality');
   if (isLevel(fromUrl)) return { level: fromUrl, auto: false };
-  if (o.setting !== 'auto') return { level: o.setting, auto: false };
+  if (isLevel(o.setting)) return { level: o.setting, auto: false };
   return { level: o.auto, auto: true };
 }
 
