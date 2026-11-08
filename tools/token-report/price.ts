@@ -8,6 +8,7 @@ export interface ModelPrice {
 }
 
 export interface Pricing {
+  notes?: string;
   checked: string;
   models: Record<string, ModelPrice>;
 }

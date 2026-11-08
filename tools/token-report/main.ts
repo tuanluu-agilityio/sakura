@@ -32,7 +32,7 @@ if (!noProject) {
     setField(item, 'Cache read tokens', r.cacheRead);
     setField(item, 'Cost (USD)', Number(r.costUsd.toFixed(2)));
     setField(item, 'Agent runs', r.runs);
-    setField(item, 'Model (actual)', r.model);
+    if (r.implModel) setField(item, 'Model (actual)', r.implModel);
     updated++;
   }
   console.log(`token-report: updated ${updated} Project items`);
