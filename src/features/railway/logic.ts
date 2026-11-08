@@ -35,6 +35,11 @@ export function stepBarrier(a: number, closed: boolean, dt: number): number {
 
 /** Alternating warning lamps, 1 Hz. */
 export function lampOn(elapsed: number): [boolean, boolean] {
-  const on = elapsed % 1 < 0.5;
+  const on = lampAOn(elapsed);
   return [on, !on];
+}
+
+/** Allocation-free form of `lampOn` for per-frame use: true = lamp A on (lamp B is the opposite). */
+export function lampAOn(elapsed: number): boolean {
+  return elapsed % 1 < 0.5;
 }

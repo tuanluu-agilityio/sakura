@@ -3,7 +3,7 @@ import type { Feature, WorldContext } from '../../core/types';
 import { TRAIN_CFG, crossingClosed, type TrainCfg } from '../../shared/train-schedule';
 import { buildCrossing, type CrossingGear } from './crossing';
 import { buildFences, type Fences } from './fences';
-import { fenceSegments, lampOn, stepBarrier } from './logic';
+import { fenceSegments, lampAOn, stepBarrier } from './logic';
 import { buildTrack, type Track } from './track';
 
 const COLLIDER_OFFSET = 0.3; // gate collider sits this far inside the gap, toward the track
@@ -47,7 +47,7 @@ export function createRailway(cfg: TrainCfg = TRAIN_CFG): Feature {
       const start = crossingClosed(c.time.elapsed, crossing.x, cfg);
       a = start ? 1 : 0;
       gateIds.forEach((id) => c.colliders.setEnabled(id, start));
-      gear.update(a, lampOn(c.time.elapsed));
+      gear.update(a, lampAOn(c.time.elapsed));
       c.scene.add(track.group, fences.group, gear.group);
       if (start) {
         closed = true;
@@ -64,7 +64,7 @@ export function createRailway(cfg: TrainCfg = TRAIN_CFG): Feature {
         ctx.bus.emit('crossing:state', { closed });
       }
       a = stepBarrier(a, closed, dt);
-      gear.update(a, lampOn(elapsed));
+      gear.update(a, lampAOn(elapsed));
     },
 
     dispose() {

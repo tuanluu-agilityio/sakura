@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { Scene, Vector3 } from 'three';
 import { createColliders } from '../../core/colliders';
 import { createBus } from '../../core/bus';
@@ -51,7 +51,7 @@ describe('railway crossing', () => {
     expect(walk(ctx.colliders, LAYOUT.crossing.x)).toBeLessThan(-49);
     step(25); // run 0 window closed
     const z = walk(ctx.colliders, LAYOUT.crossing.x);
-    expect(Math.abs(z + 40)).toBeCloseTo(3.4, 0);
+    expect(Math.abs(z + 40)).toBeCloseTo(3.2, 1);
   });
 
   it('derives state from the schedule across time jumps without events', () => {
@@ -67,8 +67,7 @@ describe('railway crossing', () => {
 
   it('emits crossing:state once per transition', () => {
     const { emits, step } = setup();
-    const spy = vi.fn();
-    for (let i = 0; i <= 2000; i++) { step(i * 0.1); spy(); }
+    for (let i = 0; i <= 2000; i++) { step(i * 0.1); }
     expect(emits).toEqual([true, false, true, false, true, false]);
   });
 
