@@ -7,12 +7,15 @@ import { resizeRenderer } from './core/renderer';
 import { LAYOUT } from './core/layout';
 import type { GameMode, QualityLevel, WorldContext } from './core/types';
 import { features } from './features';
+import { createCharacterStage } from './shared/characterStage';
+import { loadCharacter, resolveClip, type CharacterRig, type ClipName } from './shared/characters';
 
 declare global {
   interface Window {
     __sakura?: { ready: boolean; readonly mode: GameMode; readonly quality: QualityLevel; readonly fps: number; setMode(m: GameMode): void;
       /** `?debug=1` only: live context and runtime quality switch for e2e tests. */
-      ctx?: WorldContext; setQuality?(level: QualityLevel): void };
+      ctx?: WorldContext; setQuality?(level: QualityLevel): void;
+      characters?: { load(id: 'player' | 'boy' | 'girl'): Promise<CharacterRig>; resolve(names: string[], want: ClipName): string; stage(): () => void } };
   }
 }
 
@@ -87,6 +90,7 @@ async function boot(): Promise<void> {
   if (new URLSearchParams(location.search).get('debug') === '1') {
     window.__sakura.ctx = ctx;
     window.__sakura.setQuality = applyQuality;
+    window.__sakura.characters = { load: (id) => loadCharacter(ctx, id), resolve: resolveClip, stage: () => createCharacterStage(scene) };
   }
 }
 
