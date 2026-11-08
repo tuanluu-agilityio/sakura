@@ -27,8 +27,8 @@ export function envelope(t: number, dur: number): number {
 }
 
 const euler = new Euler();
-export function headDelta(pitch: number, yaw: number): Quaternion {
-  return new Quaternion().setFromEuler(euler.set(pitch, yaw, 0, 'YXZ'));
+export function headDelta(pitch: number, yaw: number, out: Quaternion = new Quaternion()): Quaternion {
+  return out.setFromEuler(euler.set(pitch, yaw, 0, 'YXZ'));
 }
 
 export interface HeadAnimator { captureRest(): void; update(dt: number, partnerSide: 1 | -1): void }
@@ -37,6 +37,7 @@ interface LookEvent { pitch: number; yawPerSide: number; dur: number }
 
 export function createHeadAnimator(bone: Object3D | null, rng: () => number, startDelay = 0): HeadAnimator {
   const rest = new Quaternion();
+  const delta = new Quaternion();
   let warned = false;
   let wait = nextLookDelay(rng) + startDelay;
   let event: LookEvent | null = null;
@@ -58,9 +59,11 @@ export function createHeadAnimator(bone: Object3D | null, rng: () => number, sta
           t = 0;
         }
       }
-      const e = event ? envelope(t, event.dur) : 0;
-      const d = event ? headDelta(event.pitch * e, event.yawPerSide * partnerSide * e) : headDelta(0, 0);
-      bone.quaternion.copy(rest).multiply(d);
+      bone.quaternion.copy(rest);
+      if (event) {
+        const e = envelope(t, event.dur);
+        bone.quaternion.multiply(headDelta(event.pitch * e, event.yawPerSide * partnerSide * e, delta));
+      }
     },
   };
 }

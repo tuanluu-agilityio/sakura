@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { Object3D } from 'three';
-import { createHeadAnimator, envelope, findHeadBone, nextLookDelay } from './head';
+import { Object3D, Vector3 } from 'three';
+import { createHeadAnimator, envelope, findHeadBone, headDelta, nextLookDelay } from './head';
 
 function chain(...names: string[]): Object3D {
   const nodes = names.map((n) => Object.assign(new Object3D(), { name: n }));
@@ -61,5 +61,23 @@ describe('createHeadAnimator', () => {
     for (let i = 0; i < 30; i++) a.update(0.1, 1); // past the end of the 3 s event
     expect(mid.angleTo(new Object3D().quaternion)).toBeGreaterThan(0);
     expect(bone.quaternion.angleTo(new Object3D().quaternion)).toBeLessThan(1e-6);
+  });
+});
+
+describe('head direction', () => {
+  const fwd = new Vector3(0, 0, 1);
+  it('negative pitch tilts the face up (+z forward)', () => {
+    expect(fwd.clone().applyQuaternion(headDelta(-0.35, 0)).y).toBeGreaterThan(0.3);
+  });
+  it('partnerSide turns the face toward the partner', () => {
+    for (const side of [1, -1] as const) {
+      const bone = new Object3D();
+      let calls = 0;
+      const a = createHeadAnimator(bone, () => (calls++ === 0 ? 0 : 0.9)); // delay 6, then a turn event
+      a.captureRest();
+      for (let i = 0; i < 80; i++) a.update(0.1, side); // 6 s wait, then 2 s into the 4 s turn (peak)
+      const x = fwd.clone().applyQuaternion(bone.quaternion).x;
+      expect(Math.sign(x)).toBe(side);
+    }
   });
 });

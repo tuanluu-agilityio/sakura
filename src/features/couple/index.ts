@@ -1,6 +1,7 @@
-import { Box3, Vector3 } from 'three';
+import type { Vector3 } from 'three';
 import { LAYOUT } from '../../core/layout';
 import type { Feature, WorldContext } from '../../core/types';
+import { LOOKS } from '../../shared/chibi';
 import { loadCharacter, type CharacterRig } from '../../shared/characters';
 import { createBench, SEAT_HEIGHT } from './bench';
 import { createHeadAnimator, findHeadBone, type HeadAnimator } from './head';
@@ -17,18 +18,20 @@ let colliderIds: string[] = [];
 let ctxRef: WorldContext | null = null;
 
 async function seat(ctx: WorldContext, id: 'boy' | 'girl', x: number, seatTop: number, side: 1 | -1, phase: number, delay: number): Promise<void> {
-  let rig: CharacterRig;
-  try { rig = await loadCharacter(ctx, id); } catch (e) { console.warn(`[couple] ${id} failed to load`, e); return; }
-  rig.play('sit', 0);
-  rig.update(0);
-  const height = new Box3().setFromObject(rig.root).getSize(new Vector3()).y;
-  rig.root.rotation.y = 0;
-  rig.root.position.set(x, seatTop + SIT_Y_OFFSET * height, LAYOUT.bench.z);
-  const head = createHeadAnimator(findHeadBone(rig.root), Math.random, delay);
-  head.captureRest();
-  ctx.scene.add(rig.root);
-  sitters.push({ rig, head, base: rig.root.scale.clone(), phase, side });
-  colliderIds.push(ctx.colliders.add({ kind: 'circle', x, z: LAYOUT.bench.z, r: 0.5 }));
+  try {
+    const rig = await loadCharacter(ctx, id);
+    rig.play('sit', 0);
+    rig.update(0);
+    rig.root.rotation.y = 0;
+    rig.root.position.set(x, seatTop + SIT_Y_OFFSET * LOOKS[id].height, LAYOUT.bench.z);
+    const head = createHeadAnimator(findHeadBone(rig.root), Math.random, delay);
+    head.captureRest();
+    ctx.scene.add(rig.root);
+    sitters.push({ rig, head, base: rig.root.scale.clone(), phase, side });
+    colliderIds.push(ctx.colliders.add({ kind: 'circle', x, z: LAYOUT.bench.z, r: 0.5 }));
+  } catch (e) {
+    console.warn(`[couple] ${id} skipped`, e);
+  }
 }
 
 const feature: Feature = {
