@@ -3,13 +3,13 @@ Milestone: M2
 Updated: 2026-11-08
 
 ## In progress
-- none
+- M2 wave 1: #19 M2-T2 train, #20 M2-T3 village, #21 M2-T4 couple (worktrees ../sakura-wt/<N>). Ledger .superpowers/sdd/M2-life/progress.md
 
 ## Ready next
-- M2 per docs/superpowers/plans/M2-*.md, after owner approves M1 screenshots.
+- After #19 merges: #18 M2-T1 railway (sonnet); then #22 M2-T5 integration (opus). Briefs in .superpowers/sdd/M2-life/
 
 ## Blocked
-- M1 human checkpoint: owner reviews composites (sakura-wt/17/test-results/m1-composite-*.png, or the live site). Start M2 only after the owner says go.
+- none
 
 ## Notes
 - M1 done: #10-#17 merged (PRs 46-53). Parked for M6: real-GPU fps check (CI is software GL), grass blades get no shadows, close-up check of ground petal z-fight/mound striping.
