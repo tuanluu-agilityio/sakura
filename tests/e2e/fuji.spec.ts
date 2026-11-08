@@ -10,7 +10,11 @@ test('fuji is visible above the horizon with a snow cap at low quality', async (
     .poll(() => page.evaluate(() => (window as any).__sakura?.ready), { timeout: 10_000 })
     .toBe(true);
   await page.waitForTimeout(500);
-  const png = await page.screenshot({ path: `test-results/fuji-${testInfo.project.name}.png` });
+  await page.screenshot({ path: `test-results/fuji-${testInfo.project.name}.png` });
+  // The portrait (mobile) intro frustum barely reaches Fuji, so aim the camera at it for the pixel checks.
+  await page.evaluate(() => (window as any).__sakura.ctx.camera.lookAt(0, 150, -900));
+  await page.waitForTimeout(300);
+  const png = await page.screenshot({ path: `test-results/fuji-aimed-${testInfo.project.name}.png` });
 
   const r = await page.evaluate(async (b64) => {
     const img = new Image();
