@@ -29,12 +29,13 @@ const feature: Feature = {
     train.group.visible = s.active;
     if (s.active) {
       const z = LAYOUT.railway.z;
-      train.cars.forEach((car, i) => {
+      for (let i = 0; i < train.cars.length; i++) {
+        const car = train.cars[i]!;
         const x = s.frontX - s.direction * TRAIN_CFG.carLength * (i + 0.5);
-        car.position.set(x, ctx!.terrain.heightAt(x, z) + RAIL_TOP + 0.01 * Math.sin(elapsed * 3.1 + i), z);
+        car.position.set(x, ctx.terrain.heightAt(x, z) + RAIL_TOP + 0.01 * Math.sin(elapsed * 3.1 + i), z);
         car.rotation.y = s.direction === 1 ? 0 : Math.PI;
         car.rotation.z = 0.004 * Math.sin(elapsed * 1.7 + i);
-      });
+      }
     }
     for (const e of tracker.advance(elapsed)) {
       if (e.type === 'approach') ctx.bus.emit('train:approach', { direction: e.direction, eta: e.eta });
