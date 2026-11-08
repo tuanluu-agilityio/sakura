@@ -20,11 +20,12 @@ test('hero sakura tree fills the upper centre with pink', async ({ page }, testI
     const meshes: any[] = [];
     for (const o of ctx.scene.children) if (o.name.startsWith('sakura-tree-')) o.traverse((m: any) => { if (m.isMesh) meshes.push(m); });
     others.forEach((o: any) => { o.visible = false; });
-    meshes.forEach((m) => { m.frustumCulled = false; });
+    // info.render.calls spans the whole composited frame (postfx passes included), so count the tree draws directly.
+    let calls = 0;
+    meshes.forEach((m) => { m.frustumCulled = false; m.onAfterRender = () => { calls++; }; });
     r.render(ctx.scene, ctx.camera);
-    const calls = r.info.render.calls as number;
     others.forEach((o: any) => { o.visible = true; });
-    meshes.forEach((m) => { m.frustumCulled = true; });
+    meshes.forEach((m) => { m.frustumCulled = true; m.onAfterRender = () => {}; });
     // Render the full scene and read back in the same task (drawing buffer is not preserved).
     r.render(ctx.scene, ctx.camera);
     const gl = r.getContext() as WebGL2RenderingContext;

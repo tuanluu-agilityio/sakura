@@ -100,6 +100,13 @@ for (const level of LEVELS) {
     const suffix = testInfo.project.name === 'desktop' ? '' : `-${testInfo.project.name}`;
     const shot = await page.screenshot({ path: `test-results/m1-composite-${level}${suffix}.png` });
     const fps = await page.evaluate(() => (window as any).__sakura.fps as number);
+    // __sakura.fps cannot read below 10 (the loop clamps dt to 0.1 s); log the real frame rate next to it.
+    const rawFps = await page.evaluate(() => new Promise<number>((done) => {
+      const start = performance.now();
+      let n = 0;
+      const tick = (now: number) => { n++; if (now - start < 2000) requestAnimationFrame(tick); else done((n * 1000) / (now - start)); };
+      requestAnimationFrame(tick);
+    }));
 
     await page.evaluate(() => {
       const { scene } = (window as any).__sakura.ctx;
@@ -109,7 +116,7 @@ for (const level of LEVELS) {
     const skyShot = await page.screenshot();
 
     const m = await measure(shot.toString('base64'), skyShot.toString('base64'), page);
-    console.log(`[m1-composite] ${testInfo.project.name}/${level} fps ${fps.toFixed(1)} ${JSON.stringify(m)}`);
+    console.log(`[m1-composite] ${testInfo.project.name}/${level} fps ${fps.toFixed(1)} rawFps ${rawFps.toFixed(1)} ${JSON.stringify(m)}`);
     expect(errors).toEqual([]);
     expect(fps).toBeGreaterThan(20);
     expect(m.pinkShare).toBeGreaterThan(0.08);
