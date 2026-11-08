@@ -4,6 +4,7 @@ import postfx from './postfx';
 import fuji from './fuji';
 import terrain from './terrain';
 import sakuraTrees from './sakura-trees';
+import petals from './petals';
 
 /** Registration order = init and update order. M1 base order: sky, postfx, fuji, terrain, sakura-trees, petals. */
-export const features: Feature[] = [sky, postfx, fuji, terrain, sakuraTrees];
+export const features: Feature[] = [sky, postfx, fuji, terrain, sakuraTrees, petals];
