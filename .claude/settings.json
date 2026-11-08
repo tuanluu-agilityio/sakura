@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && node tools/resume/main.ts || true",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}
