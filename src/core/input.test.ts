@@ -80,4 +80,23 @@ describe('createInput', () => {
     expect(input.zoom).toBe(2);
     expect(input.consumeAction('menu')).toBe(true);
   });
+
+  it('ignores action keys with modifiers or from editable targets', () => {
+    const { input, fire, target } = setup();
+    fire('keydown', { code: 'KeyP', ctrlKey: true });
+    fire('keydown', { code: 'KeyM', metaKey: true });
+    fire('keydown', { code: 'Escape', altKey: true });
+    const inp = new Event('keydown');
+    Object.assign(inp, { code: 'KeyP' });
+    Object.defineProperty(inp, 'target', { value: { tagName: 'INPUT' } });
+    target.dispatchEvent(inp);
+    expect(input.consumeAction('photo')).toBe(false);
+    expect(input.consumeAction('mute')).toBe(false);
+    expect(input.consumeAction('menu')).toBe(false);
+    const e = new Event('keydown');
+    Object.assign(e, { code: 'KeyP' });
+    Object.defineProperty(e, 'target', { value: { tagName: 'DIV', isContentEditable: true } });
+    target.dispatchEvent(e);
+    expect(input.consumeAction('photo')).toBe(false);
+  });
 });

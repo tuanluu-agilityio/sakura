@@ -4,6 +4,12 @@ import type { Action, InputState } from './types';
 const ACTION_KEYS: Record<string, Action> = { KeyP: 'photo', KeyM: 'mute', Escape: 'menu' };
 const MOVE_KEYS = new Set(['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']);
 
+function isEditable(t: EventTarget | null): boolean {
+  const el = t as { tagName?: string; isContentEditable?: boolean } | null;
+  const tag = el?.tagName?.toLowerCase();
+  return tag === 'input' || tag === 'textarea' || el?.isContentEditable === true;
+}
+
 export type Input = InputState & { endFrame(): void; dispose(): void };
 
 /** Keyboard + mouse (+ touch sink) input. Key events and mouse-move/up listen on the target's document. */
@@ -60,6 +66,7 @@ export function createInput(target: HTMLElement): Input {
   const onKeyDown = (e: KeyboardEvent): void => {
     const a = ACTION_KEYS[e.code];
     if (a) {
+      if (e.ctrlKey || e.metaKey || e.altKey || isEditable(e.target)) return;
       if (!e.repeat) actions.add(a);
       return;
     }

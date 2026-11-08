@@ -45,4 +45,15 @@ describe('createColliders', () => {
     reg.resolve(pos, 0.3);
     expect(pos.x).toBeCloseTo(0.2);
   });
+
+  it('returns promptly for radius 0 and for a 10 km jump', () => {
+    const reg = createColliders();
+    reg.add({ kind: 'circle', x: 0, z: 0, r: 1 });
+    const a = new Vector3(0, 0, 2);
+    reg.resolve(a, 0, new Vector3(0, 0, 3));
+    expect(a.z).toBeCloseTo(2);
+    const b = new Vector3(0.2, 0, 10000);
+    reg.resolve(b, 0.4, new Vector3(0, 0, -10000));
+    expect(b.z).toBeCloseTo(10000);
+  });
 });

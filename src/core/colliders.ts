@@ -56,6 +56,8 @@ function pushOut(c: Collider, pos: Vector3, radius: number): boolean {
   return true;
 }
 
+const MAX_STEPS = 64; // beyond this (teleport) skip the sweep and resolve at the destination
+
 export function createColliders(): ColliderRegistry {
   const items = new Map<string, { c: Collider; on: boolean }>();
   let next = 0;
@@ -82,10 +84,9 @@ export function createColliders(): ColliderRegistry {
       if (it) it.on = on;
     },
     resolve(pos, radius, prev) {
-      if (prev) {
-        const dx = pos.x - prev.x;
-        const dz = pos.z - prev.z;
-        const steps = Math.max(1, Math.ceil(Math.hypot(dx, dz) / (radius / 2)));
+      const dist = prev ? Math.hypot(pos.x - prev.x, pos.z - prev.z) : 0;
+      const steps = Math.max(1, Math.ceil(dist / (Math.max(radius, 0.01) / 2)));
+      if (prev && steps <= MAX_STEPS) {
         const endX = pos.x;
         const endZ = pos.z;
         const endY = pos.y;
