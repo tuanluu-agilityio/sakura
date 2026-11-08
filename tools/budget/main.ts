@@ -1,8 +1,7 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { gzipSync } from 'node:zlib';
-const SEP = String.fromCharCode(92);
-import { BUDGET_BYTES, sumBudget, type SizedFile } from './budget.ts';
+import { BUDGET_BYTES, normalizePath, sumBudget, type SizedFile } from './budget.ts';
 
 function walk(dir: string): string[] {
   return readdirSync(dir).flatMap((n) => {
@@ -13,7 +12,7 @@ function walk(dir: string): string[] {
 
 const root = 'dist';
 const files: SizedFile[] = walk(root).map((p) => ({
-  path: relative(root, p).split(SEP).join('/'),
+  path: normalizePath(relative(root, p)),
   gzip: gzipSync(readFileSync(p)).length,
 }));
 

@@ -14,6 +14,11 @@ Relaxing single-page 3D anime-style Japanese countryside (Three.js + TypeScript 
 - `src/core/types.ts` changes after M0 = separate PR merged first, labelled `contract`.
 - All agent-facing text in English. Human-facing (spec, `reports/tokens-summary.md`, root `README.md`) in Vietnamese.
 
+## Binding rules
+- Assets only in `public/assets/{models,audio,textures}`, each listed in `CREDITS.md` (CC0 or CC-BY only).
+- Initial load <= 12 MB compressed excluding audio, enforced by `npm run budget`.
+- Node >= 24, npm only. No runtime dependencies besides `three` until a task says so.
+
 ## Never read
 `public/assets/**`, `dist/**`, `node_modules/**`, `reports/*.csv`, `.superpowers/**`, `package-lock.json`.
 
