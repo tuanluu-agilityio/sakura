@@ -51,6 +51,7 @@ async function boot(): Promise<void> {
     ctx.time.elapsed = elapsed;
     if (dt > 0) fps = fps === 0 ? 1 / dt : fps * 0.9 + (1 / dt) * 0.1;
     for (const f of features) f.update?.(dt, elapsed);
+    ctx.endFrame();
     renderer.render(scene, camera);
     if (autoQuality && monitor.sample(dt) === 'downgrade') {
       const lower = lowerLevel(ctx.quality.level);
