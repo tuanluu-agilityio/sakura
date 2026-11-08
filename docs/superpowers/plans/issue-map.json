@@ -1,0 +1,344 @@
+{
+  "M0-T1": {
+    "issue": 1,
+    "model": "sonnet",
+    "type": "scaffold",
+    "size": "M",
+    "depends": [
+      "M0-B0"
+    ]
+  },
+  "M0-T2": {
+    "issue": 2,
+    "model": "opus",
+    "type": "feature-logic",
+    "size": "M",
+    "depends": [
+      "M0-T1"
+    ]
+  },
+  "M0-T3": {
+    "issue": 3,
+    "model": "sonnet",
+    "type": "feature-logic",
+    "size": "M",
+    "depends": [
+      "M0-T2"
+    ]
+  },
+  "M0-T4": {
+    "issue": 4,
+    "model": "sonnet",
+    "type": "devops",
+    "size": "M",
+    "depends": [
+      "M0-T1"
+    ]
+  },
+  "M0-T5": {
+    "issue": 5,
+    "model": "sonnet",
+    "type": "devops",
+    "size": "M",
+    "depends": [
+      "M0-T4"
+    ]
+  },
+  "M0-T6": {
+    "issue": 6,
+    "model": "sonnet",
+    "type": "devops",
+    "size": "S",
+    "depends": [
+      "M0-T4"
+    ]
+  },
+  "M1-T1": {
+    "issue": 10,
+    "model": "opus",
+    "type": "shader-visual",
+    "size": "M",
+    "depends": []
+  },
+  "M1-T2": {
+    "issue": 11,
+    "model": "sonnet",
+    "type": "shader-visual",
+    "size": "M",
+    "depends": []
+  },
+  "M1-T3": {
+    "issue": 12,
+    "model": "sonnet",
+    "type": "shader-visual",
+    "size": "S",
+    "depends": []
+  },
+  "M1-T4": {
+    "issue": 13,
+    "model": "sonnet",
+    "type": "feature-logic",
+    "size": "M",
+    "depends": []
+  },
+  "M1-T5": {
+    "issue": 14,
+    "model": "opus",
+    "type": "shader-visual",
+    "size": "M",
+    "depends": []
+  },
+  "M1-T6": {
+    "issue": 15,
+    "model": "opus",
+    "type": "shader-visual",
+    "size": "L",
+    "depends": []
+  },
+  "M1-T7": {
+    "issue": 16,
+    "model": "sonnet",
+    "type": "asset-sourcing",
+    "size": "M",
+    "depends": []
+  },
+  "M1-T8": {
+    "issue": 17,
+    "model": "opus",
+    "type": "integration",
+    "size": "S",
+    "depends": [
+      "M1-T1",
+      "M1-T2",
+      "M1-T3",
+      "M1-T4",
+      "M1-T5",
+      "M1-T6",
+      "M1-T7"
+    ]
+  },
+  "M2-T1": {
+    "issue": 18,
+    "model": "sonnet",
+    "type": "feature-logic",
+    "size": "M",
+    "depends": [
+      "M2-T2"
+    ]
+  },
+  "M2-T2": {
+    "issue": 19,
+    "model": "sonnet",
+    "type": "feature-logic",
+    "size": "M",
+    "depends": []
+  },
+  "M2-T3": {
+    "issue": 20,
+    "model": "sonnet",
+    "type": "shader-visual",
+    "size": "M",
+    "depends": []
+  },
+  "M2-T4": {
+    "issue": 21,
+    "model": "sonnet",
+    "type": "feature-logic",
+    "size": "M",
+    "depends": [
+      "M1-T7"
+    ]
+  },
+  "M2-T5": {
+    "issue": 22,
+    "model": "opus",
+    "type": "integration",
+    "size": "S",
+    "depends": [
+      "M2-T1",
+      "M2-T2",
+      "M2-T3",
+      "M2-T4"
+    ]
+  },
+  "M3-T1": {
+    "issue": 23,
+    "model": "opus",
+    "type": "feature-logic",
+    "size": "M",
+    "depends": [
+      "M1-T4",
+      "M1-T7"
+    ]
+  },
+  "M3-T2": {
+    "issue": 24,
+    "model": "opus",
+    "type": "feature-logic",
+    "size": "M",
+    "depends": []
+  },
+  "M3-T3": {
+    "issue": 25,
+    "model": "sonnet",
+    "type": "ui",
+    "size": "M",
+    "depends": []
+  },
+  "M3-T4": {
+    "issue": 26,
+    "model": "sonnet",
+    "type": "shader-visual",
+    "size": "S",
+    "depends": [
+      "M1-T6",
+      "M3-T1"
+    ]
+  },
+  "M3-T5": {
+    "issue": 27,
+    "model": "opus",
+    "type": "integration",
+    "size": "S",
+    "depends": [
+      "M3-T1",
+      "M3-T2",
+      "M3-T3",
+      "M3-T4"
+    ]
+  },
+  "M4-T1": {
+    "issue": 28,
+    "model": "sonnet",
+    "type": "audio",
+    "size": "M",
+    "depends": []
+  },
+  "M4-T2": {
+    "issue": 29,
+    "model": "sonnet",
+    "type": "audio",
+    "size": "M",
+    "depends": [
+      "M4-T1"
+    ]
+  },
+  "M4-T3": {
+    "issue": 30,
+    "model": "sonnet",
+    "type": "asset-sourcing",
+    "size": "M",
+    "depends": [
+      "M4-T1"
+    ]
+  },
+  "M4-T4": {
+    "issue": 31,
+    "model": "sonnet",
+    "type": "audio",
+    "size": "M",
+    "depends": [
+      "M4-T1",
+      "M4-T2"
+    ]
+  },
+  "M5-T0": {
+    "issue": 32,
+    "model": "haiku",
+    "type": "ui",
+    "size": "S",
+    "depends": []
+  },
+  "M5-T1": {
+    "issue": 33,
+    "model": "sonnet",
+    "type": "ui",
+    "size": "M",
+    "depends": [
+      "M5-T0"
+    ]
+  },
+  "M5-T2": {
+    "issue": 34,
+    "model": "sonnet",
+    "type": "ui",
+    "size": "L",
+    "depends": [
+      "M5-T0"
+    ]
+  },
+  "M5-T3": {
+    "issue": 35,
+    "model": "sonnet",
+    "type": "ui",
+    "size": "S",
+    "depends": [
+      "M5-T0"
+    ]
+  },
+  "M5-T4": {
+    "issue": 36,
+    "model": "haiku",
+    "type": "ui",
+    "size": "S",
+    "depends": [
+      "M5-T0"
+    ]
+  },
+  "M5-T5": {
+    "issue": 37,
+    "model": "opus",
+    "type": "integration",
+    "size": "S",
+    "depends": [
+      "M5-T1",
+      "M5-T2",
+      "M5-T3",
+      "M5-T4"
+    ]
+  },
+  "M6-T1": {
+    "issue": 38,
+    "model": "sonnet",
+    "type": "perf",
+    "size": "S",
+    "depends": []
+  },
+  "M6-T2": {
+    "issue": 39,
+    "model": "opus",
+    "type": "perf",
+    "size": "M",
+    "depends": [
+      "M6-T1"
+    ]
+  },
+  "M6-T3": {
+    "issue": 40,
+    "model": "sonnet",
+    "type": "perf",
+    "size": "S",
+    "depends": []
+  },
+  "M6-T4": {
+    "issue": 41,
+    "model": "opus",
+    "type": "integration",
+    "size": "S",
+    "depends": [
+      "M6-T2",
+      "M6-T3"
+    ]
+  },
+  "M6-T5": {
+    "issue": 42,
+    "model": "haiku",
+    "type": "docs",
+    "size": "S",
+    "depends": [
+      "M6-T2",
+      "M6-T3",
+      "M6-T4"
+    ]
+  }
+}
