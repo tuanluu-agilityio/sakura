@@ -37,6 +37,8 @@ const feature: Feature = {
     mesh.receiveShadow = false;
     scene.add(mesh);
   },
+  /** Nothing here depends on the quality profile; intentionally a no-op. */
+  setQuality() {},
   dispose() {
     if (!mesh) return;
     scene?.remove(mesh);

@@ -9,9 +9,9 @@ const CRATER = 0.04 * R;
 const ridge = (angle: number, h01: number) =>
   0.6 * Math.sin(7 * angle + 3 * h01) + 0.4 * Math.sin(13 * angle - 2 * h01);
 
-/** Concave cone profile with radial ridges; h01 in [0,1] (0 = base). */
+/** Concave cone profile with radial ridges, ending at crater radius 0.04R at h01 = 1; h01 in [0,1] (0 = base). */
 export function fujiRadiusAt(h01: number, angle: number): number {
-  return R * Math.pow(1 - h01, 1.35) * (1 + 0.04 * ridge(angle, h01));
+  return R * Math.pow(1 - h01, 1.35) * (1 + 0.04 * ridge(angle, h01)) + CRATER * h01;
 }
 
 /** Seeded mulberry32 for small deterministic jitter. */
@@ -36,7 +36,7 @@ export function buildFujiGeometry(seed: number): THREE.BufferGeometry {
     for (let i = 0; i < RADIAL; i++) {
       const a = (i / RADIAL) * Math.PI * 2;
       const jitter = j === 0 || j === VERTICAL ? 0 : (rand() - 0.5) * 2;
-      const r = fujiRadiusAt(h, a) + CRATER * h + jitter;
+      const r = fujiRadiusAt(h, a) + jitter;
       pos[n++] = Math.cos(a) * r;
       pos[n++] = h * H;
       pos[n++] = Math.sin(a) * r;

@@ -10,15 +10,17 @@ varying float vH;
 varying vec3 vObj;
 
 float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
-float vnoise(vec2 p) {
+// Value noise periodic in x (period px lattice cells) so the angular seam at +-pi vanishes.
+float vnoise(vec2 p, float px) {
   vec2 i = floor(p), f = fract(p);
   f = f * f * (3.0 - 2.0 * f);
-  return mix(mix(hash(i), hash(i + vec2(1, 0)), f.x), mix(hash(i + vec2(0, 1)), hash(i + vec2(1, 1)), f.x), f.y);
+  float x0 = mod(i.x, px), x1 = mod(i.x + 1.0, px);
+  return mix(mix(hash(vec2(x0, i.y)), hash(vec2(x1, i.y)), f.x), mix(hash(vec2(x0, i.y + 1.0)), hash(vec2(x1, i.y + 1.0)), f.x), f.y);
 }
 
 void main() {
   float ang = atan(vObj.z, vObj.x);
-  float noise = vnoise(vec2(ang * 9.0, vH * 14.0)) * 2.0 - 1.0;
+  float noise = vnoise(vec2(ang * 2.8648, vH * 14.0), 18.0) * 2.0 - 1.0;
   vec3 col = mix(uFuji, uSnow, smoothstep(0.62, 0.72, vH + noise * 0.06));
   float lit = dot(normalize(vNormal), normalize(uSunDir)) * 0.5 + 0.5;
   col = mix(uShadow, col, mix(0.55, 1.0, smoothstep(0.25, 0.75, lit)));
