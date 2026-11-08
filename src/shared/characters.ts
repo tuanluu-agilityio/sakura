@@ -23,7 +23,7 @@ const ALIASES: Record<ClipName, RegExp[]> = {
 
 function find(names: string[], want: ClipName): string | undefined {
   for (const re of ALIASES[want]) {
-    const hit = names.find((n) => re.test(n));
+    const hit = (want === 'idle' ? names.find((n) => re.test(n) && !/sit/i.test(n)) : undefined) ?? names.find((n) => re.test(n));
     if (hit !== undefined) return hit;
   }
   return undefined;
@@ -65,12 +65,13 @@ export function createRig(root: Object3D, mixer: AnimationMixer, clips: Animatio
       else next.setEffectiveWeight(1);
       active = next;
     },
+    /** Sticky: the scale also applies to clips played later, so callers may set it every frame. */
     setSpeedScale(s) {
       scale = s;
       if (active) active.timeScale = s;
     },
     update(dt) { mixer.update(dt); },
-    dispose() { mixer.stopAllAction(); onDispose(); },
+    dispose() { mixer.stopAllAction(); mixer.uncacheRoot(root); onDispose(); },
   };
 }
 

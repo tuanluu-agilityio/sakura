@@ -67,3 +67,42 @@ describe('procedural characters', () => {
     expect(buildClips('girl').map((c) => c.name).sort()).toEqual(['idle', 'run', 'sit', 'walk']);
   });
 });
+
+describe('real mixer drives the nodes', () => {
+  it('sit lowers hips to 0.2H and rotates thighs', async () => {
+    const rig = await loadCharacter({} as WorldContext, 'player');
+    rig.play('sit', 0);
+    rig.update(1);
+    const hips = rig.root.getObjectByName('hips')!;
+    expect(hips.position.y).toBeCloseTo(0.2 * 1.7, 2);
+    expect(rig.root.getObjectByName('thighL')!.quaternion.x).toBeLessThan(-0.5);
+  });
+  it('walk moves hips and legs over time', async () => {
+    const rig = await loadCharacter({} as WorldContext, 'boy');
+    rig.play('walk', 0);
+    rig.update(0.25);
+    const thigh = rig.root.getObjectByName('thighL')!;
+    const hips = rig.root.getObjectByName('hips')!;
+    const a = { q: thigh.quaternion.x, y: hips.position.y };
+    rig.update(0.25);
+    expect(Math.abs(thigh.quaternion.x - a.q)).toBeGreaterThan(0.1);
+    expect(Math.abs(hips.position.y - a.y)).toBeGreaterThan(0.001);
+  });
+  it('hips are lowest when legs are spread (feet planted)', async () => {
+    const rig = await loadCharacter({} as WorldContext, 'boy');
+    rig.play('walk', 0);
+    rig.update(0.25);
+    const low = rig.root.getObjectByName('hips')!.position.y;
+    rig.update(0.25);
+    expect(rig.root.getObjectByName('hips')!.position.y).toBeGreaterThan(low);
+  });
+  it('idle resolution prefers a clip without sit', () => {
+    expect(resolveClip(['Sitting_Idle', 'Idle'], 'idle')).toBe('Idle');
+  });
+  it('setSpeedScale is sticky across play()', () => {
+    const { rig, actions } = mockRig();
+    rig.setSpeedScale(2);
+    rig.play('run');
+    expect(actions.get('run')!.timeScale).toBe(2);
+  });
+});

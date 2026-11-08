@@ -12,8 +12,8 @@ interface Look { height: number; skin: string; hair: string; top: string; bottom
 /** Palette-only looks: three visually distinct silhouettes/colours. */
 export const LOOKS: Record<CharacterId, Look> = {
   player: { height: 1.7, skin: PALETTE.blossom, hair: PALETTE.trunk, top: PALETTE.trainStripe, bottom: PALETTE.fuji, skirt: false, fringe: 0.5 },
-  boy: { height: 1.6, skin: PALETTE.blossom, hair: PALETTE.trunk, top: PALETTE.grassDark, bottom: PALETTE.trunk, skirt: false, fringe: 0.2 },
-  girl: { height: 1.6, skin: PALETTE.blossom, hair: PALETTE.trunk, top: PALETTE.petal, bottom: PALETTE.blossomDeep, skirt: true, fringe: 0.8 },
+  boy: { height: 1.6, skin: PALETTE.blossom, hair: PALETTE.path, top: PALETTE.grassDark, bottom: PALETTE.trunk, skirt: false, fringe: 0.2 },
+  girl: { height: 1.6, skin: PALETTE.blossom, hair: PALETTE.shadowTint, top: PALETTE.petal, bottom: PALETTE.blossomDeep, skirt: true, fringe: 0.8 },
 };
 
 const q = (x: number, y = 0, z = 0): Quaternion => new Quaternion().setFromEuler(new Euler(x, y, z));
@@ -76,7 +76,7 @@ function swing(name: string, period: number, leg: number, arm: number, knee: num
   const rot = (name: string, amp: number, ph: number, bias = 0) =>
     new QuaternionKeyframeTrack(`${name}.quaternion`, t, sin(ph).flatMap((v) => q(bias + v * amp).toArray()));
   const kneeAng = (ph: number) => rot(ph ? 'kneeR' : 'kneeL', knee, ph + 0.25, knee);
-  const hipY = times.map((x) => 2 * 0.2 * H + Math.abs(Math.sin(x * Math.PI * 2)) * bob * H);
+  const hipY = times.map((x) => 2 * 0.2 * H + Math.abs(Math.cos(x * Math.PI * 2)) * bob * H);
   return new AnimationClip(name, period, [
     rot('thighL', leg, 0), rot('thighR', leg, 0.5), rot('armL', arm, 0.5), rot('armR', arm, 0),
     kneeAng(0), kneeAng(0.5),

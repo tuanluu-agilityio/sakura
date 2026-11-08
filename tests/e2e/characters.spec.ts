@@ -18,7 +18,7 @@ test('three characters load, resolve all clips and render', async ({ page }, tes
     const ctx = s.ctx;
     const out: Record<string, { ok: boolean; clips: Record<string, string> }> = {};
     const rigs: any[] = [];
-    s.characters.stage();
+    await s.characters.stage();
     for (const [i, id] of (['player', 'boy', 'girl'] as const).entries()) {
       const rig = await s.characters.load(id);
       const resolved: Record<string, string> = {};
