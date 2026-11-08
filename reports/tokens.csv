@@ -5,4 +5,12 @@ M0-T3,3,M0,feature-logic,sonnet,sonnet,2,50,26673,99696,1202438,0.7566,sonnet,0.
 M0-T4,4,M0,devops,sonnet,sonnet,2,62,18764,89110,1691276,0.7488,sonnet,0.5844,1,sonnet,0.1644,1
 M0-T5,5,M0,devops,sonnet,sonnet,2,86,33875,217183,4017698,1.6854,sonnet,1.2272,1,sonnet,0.4582,1
 M0-T6,6,M0,devops,sonnet,sonnet,2,82,30499,193152,4095311,1.6071,sonnet,1.3204,1,sonnet,0.2867,1
-orchestration,,,,,mixed,5,388,219825,919193,23502905,11.5648,,0.0000,0,,0.0000,0
+M1-T1,10,M1,shader-visual,opus,mixed,2,194,74934,238515,10456865,4.5876,opus,4.3614,1,sonnet,0.2262,1
+M1-T2,11,M1,shader-visual,sonnet,sonnet,2,62,23802,94428,1672033,0.8086,sonnet,0.6235,1,sonnet,0.1852,1
+M1-T3,12,M1,shader-visual,sonnet,sonnet,2,74,25216,98652,2050180,0.9090,sonnet,0.7304,1,sonnet,0.1786,1
+M1-T4,13,M1,feature-logic,sonnet,sonnet,2,66,32277,163313,1934379,1.1181,sonnet,0.9092,1,sonnet,0.2089,1
+M1-T5,14,M1,shader-visual,opus,mixed,2,106,52794,187046,4300970,2.6563,opus,2.4295,1,sonnet,0.2268,1
+M1-T6,15,M1,shader-visual,opus,mixed,2,166,62294,335237,7610205,4.2032,opus,3.9340,1,sonnet,0.2692,1
+M1-T7,16,M1,asset-sourcing,sonnet,sonnet,2,92,34851,139517,2876166,1.2727,sonnet,1.0694,1,sonnet,0.2033,1
+M1-T8,17,M1,integration,opus,mixed,2,116,45486,567908,4500041,4.4576,,0.0000,0,mixed,4.4576,2
+orchestration,,,,,mixed,5,640,271801,1368257,38189454,17.7879,,0.0000,0,,0.0000,0

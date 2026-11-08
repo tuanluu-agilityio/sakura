@@ -1,17 +1,18 @@
 # State
-Milestone: M1
+Milestone: M2
 Updated: 2026-11-08
 
 ## In progress
-- #17 M1-T8 integration (wt ../sakura-wt/17) — paused by usage limit; resume or re-dispatch with brief .superpowers/sdd/M1-static-scene/M1-T8-brief.md. All of #10-#16 merged (PRs 46-52). Ledger .superpowers/sdd/M1-static-scene/progress.md
+- none
 
 ## Ready next
-- After #17 merges: `npm run tokens`, STATE → M2, human checkpoint (composite screenshots) before M2.
+- M2 per docs/superpowers/plans/M2-*.md, after owner approves M1 screenshots.
 
 ## Blocked
-- none (owner configures Netlify themselves; M0 checkpoint waived 2026-11-08)
+- M1 human checkpoint: owner reviews composites (sakura-wt/17/test-results/m1-composite-*.png, or the live site). Start M2 only after the owner says go.
 
 ## Notes
+- M1 done: #10-#17 merged (PRs 46-53). Parked for M6: real-GPU fps check (CI is software GL), grass blades get no shadows, close-up check of ground petal z-fight/mound striping.
 - M0 done: #1-#6 merged (PRs #7,#8,#9,#43,#44,#45). Tokens: reports/tokens-summary.md
 - Subagents cannot run `gh pr ready` / `gh issue edit` (permission); controller marks PRs ready and merges.
 - Carry into M2-T2 brief: train front is at x=-400 at train time 0 (LAYOUT.train.startOffset derivation).
