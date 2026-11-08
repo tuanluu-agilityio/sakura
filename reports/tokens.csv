@@ -13,4 +13,9 @@ M1-T5,14,M1,shader-visual,opus,mixed,2,106,52794,187046,4300970,2.6563,opus,2.42
 M1-T6,15,M1,shader-visual,opus,mixed,2,166,62294,335237,7610205,4.2032,opus,3.9340,1,sonnet,0.2692,1
 M1-T7,16,M1,asset-sourcing,sonnet,sonnet,2,92,34851,139517,2876166,1.2727,sonnet,1.0694,1,sonnet,0.2033,1
 M1-T8,17,M1,integration,opus,mixed,2,116,45486,567908,4500041,4.4576,,0.0000,0,mixed,4.4576,2
-orchestration,,,,,mixed,5,640,271801,1368257,38189454,17.7879,,0.0000,0,,0.0000,0
+M2-T1,18,M2,feature-logic,sonnet,sonnet,2,108,37393,129295,3974032,1.4922,sonnet,1.2907,1,sonnet,0.2015,1
+M2-T2,19,M2,feature-logic,sonnet,sonnet,2,78,27865,183196,2162139,1.1692,sonnet,0.9914,1,sonnet,0.1778,1
+M2-T3,20,M2,shader-visual,sonnet,sonnet,2,118,66737,297380,5012921,2.4136,sonnet,1.9300,1,sonnet,0.4836,1
+M2-T4,21,M2,feature-logic,sonnet,sonnet,2,66,21884,114308,1854830,0.8757,sonnet,0.7059,1,sonnet,0.1698,1
+M2-T5,22,M2,integration,opus,mixed,2,102,60109,633983,4858041,5.1055,,0.0000,0,mixed,5.1055,2
+orchestration,,,,,mixed,5,764,305657,1697446,47968996,22.0674,,0.0000,0,,0.0000,0
