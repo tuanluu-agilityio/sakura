@@ -49,7 +49,7 @@ const feature: Feature = {
         anchors: tree.blossomAnchors, height: tree.height, seed: s.seed,
         geometry: card, map: blossomTexture, sway,
       });
-      blossom.castShadow = c.quality?.level !== 'low';
+      blossom.castShadow = c.quality.level !== 'low';
       group.add(trunk, blossom);
       c.scene.add(group);
       groups.push(group);

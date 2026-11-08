@@ -44,6 +44,23 @@ describe('buildTree', () => {
     }
   });
 
+  it('crown radius matches the 4.5 * scale petal volume within 15%', () => {
+    const spots = [[7, 2.2], ...[1.0, 1.1, 0.95, 1.05, 1.15, 0.9, 1.2, 1.0, 1.1, 0.95, 1.0, 1.15].map((s, i) => [100 + i, s])];
+    for (const [seed, scale] of spots) {
+      const ratio = buildTree(seed!, scale!).crownRadius / (4.5 * scale!);
+      expect(ratio, `seed ${seed}`).toBeGreaterThanOrEqual(0.85);
+      expect(ratio, `seed ${seed}`).toBeLessThanOrEqual(1.15);
+    }
+  });
+
+  it('spreads lifted anchors instead of stacking them at one height', () => {
+    const t = buildTree(7, 2.2);
+    const floor = t.height * 0.5;
+    let atFloor = 0;
+    for (let i = 1; i < t.blossomAnchors.length; i += 4) if (Math.abs(t.blossomAnchors[i]! - floor) < 1e-4) atFloor++;
+    expect(atFloor).toBeLessThanOrEqual(1);
+  });
+
   it('secondary trees have ~260 clusters', () => {
     const n = buildTree(100, 1).blossomAnchors.length / 4;
     expect(n).toBeGreaterThanOrEqual(200);

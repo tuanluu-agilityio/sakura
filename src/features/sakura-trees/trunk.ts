@@ -22,7 +22,7 @@ const TUBULAR = [8, 6, 4, 3];
 const RADIAL = [8, 6, 5, 4];
 const CLUSTERS_PER_TIP = 33;
 const OUTWARD = 0.8; // pulls children away from the trunk axis for a wide sakura crown
-const BLOB = 1.4; // unscaled horizontal radius of a cluster blob around a tip
+const BLOB = 1.6; // unscaled horizontal radius of a cluster blob around a tip
 
 const UP = new Vector3(0, 1, 0);
 
@@ -123,7 +123,10 @@ export function buildTree(seed: number, scale: number): TreeData {
     height = Math.max(height, blossomAnchors[i + 1]! + blossomAnchors[i + 3]! * 0.5);
     crownRadius = Math.max(crownRadius, Math.hypot(blossomAnchors[i]!, blossomAnchors[i + 2]!));
   }
-  const floor = height * 0.5; // keep the canopy off the lower trunk
-  for (let i = 1; i < blossomAnchors.length; i += 4) blossomAnchors[i] = Math.max(blossomAnchors[i]!, floor);
+  // Keep the canopy off the lower trunk; lifted anchors are spread so the underside is not flat.
+  const floor = height * 0.5;
+  for (let i = 1; i < blossomAnchors.length; i += 4) {
+    if (blossomAnchors[i]! < floor) blossomAnchors[i] = floor + rng() * 0.1 * height;
+  }
   return { trunk: mergeTubes(branches), blossomAnchors, height, crownRadius };
 }

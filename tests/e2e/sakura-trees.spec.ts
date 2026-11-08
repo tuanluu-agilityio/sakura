@@ -14,9 +14,19 @@ test('hero sakura tree fills the upper centre with pink', async ({ page }, testI
   const result = await page.evaluate(() => {
     const ctx = (window as any).__sakura.ctx;
     const r = ctx.renderer;
-    // Render and read back in the same task (drawing buffer is not preserved).
+    // Tree-only draw calls, worst case: hide everything else (lights too, so no shadow pass)
+    // and disable frustum culling on tree meshes for one render.
+    const others = ctx.scene.children.filter((o: any) => !o.name.startsWith('sakura-tree-') && o.visible);
+    const meshes: any[] = [];
+    for (const o of ctx.scene.children) if (o.name.startsWith('sakura-tree-')) o.traverse((m: any) => { if (m.isMesh) meshes.push(m); });
+    others.forEach((o: any) => { o.visible = false; });
+    meshes.forEach((m) => { m.frustumCulled = false; });
     r.render(ctx.scene, ctx.camera);
     const calls = r.info.render.calls as number;
+    others.forEach((o: any) => { o.visible = true; });
+    meshes.forEach((m) => { m.frustumCulled = true; });
+    // Render the full scene and read back in the same task (drawing buffer is not preserved).
+    r.render(ctx.scene, ctx.camera);
     const gl = r.getContext() as WebGL2RenderingContext;
     const w = gl.drawingBufferWidth;
     const h = gl.drawingBufferHeight;
@@ -33,7 +43,9 @@ test('hero sakura tree fills the upper centre with pink', async ({ page }, testI
     }
     return { share: pink / (rw * rh), calls };
   });
-  console.log(`[sakura-trees] pink share ${(result.share * 100).toFixed(1)}%, draw calls ${result.calls}`);
+  console.log(`[sakura-trees] pink share ${(result.share * 100).toFixed(1)}%, tree draw calls (unculled) ${result.calls}`);
   expect(result.share).toBeGreaterThan(0.08);
+  // 13 trees x (trunk + blossom), shadow passes excluded.
+  expect(result.calls).toBeLessThanOrEqual(26);
   expect(errors).toEqual([]);
 });

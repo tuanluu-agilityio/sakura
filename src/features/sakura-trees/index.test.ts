@@ -23,6 +23,7 @@ describe('sakura-trees feature', () => {
       scene,
       colliders,
       terrain: { heightAt: () => 1.8, surfaceAt: () => 'grass' },
+      quality: { level: 'medium' },
       wind: { direction: new Vector2(1, 0), strength: 0, gust: 0.5 },
     } as unknown as WorldContext;
 
