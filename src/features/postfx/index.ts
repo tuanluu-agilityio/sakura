@@ -32,12 +32,13 @@ const postfx: Feature = {
       if (rendering || !fx || s !== scene) return base.call(renderer, s, cam);
       rendering = true;
       try {
-        fx.render();
+        fx.render(cam);
       } finally {
         rendering = false;
       }
     };
     window.addEventListener('resize', onResize);
+    window.addEventListener('orientationchange', onResize);
   },
 
   setQuality(p: QualityProfile) {
@@ -50,6 +51,7 @@ const postfx: Feature = {
   dispose() {
     if (!ctx) return;
     window.removeEventListener('resize', onResize);
+    window.removeEventListener('orientationchange', onResize);
     if (original) ctx.renderer.render = original;
     removeFog(ctx.scene, fog);
     fx?.dispose();

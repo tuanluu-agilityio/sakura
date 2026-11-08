@@ -53,6 +53,12 @@ const DEFINES = [
 const PARS_ANCHOR = '#include <lights_physical_pars_fragment>';
 const END_ANCHOR = '#include <lights_fragment_end>';
 
+/** Replace a shader chunk anchor; throws when three's chunk layout changed, so the patch never fails silently. */
+export function injectAt(source: string, anchor: string, text: string): string {
+  if (!source.includes(anchor)) throw new Error(`[toon] shader anchor missing: ${anchor}`);
+  return source.replace(anchor, () => text);
+}
+
 /**
  * Cel-shaded MeshStandardMaterial (shadows, fog, instancing, skinning keep working).
  * 3-band soft ramp, lavender shadow tint (PALETTE.shadowTint), rim light (default PALETTE.snow).
@@ -65,9 +71,8 @@ export function createToonMaterial(opts: { color: ColorRepresentation; map?: Tex
   mat.onBeforeCompile = (shader) => {
     shader.uniforms.uToonShadowTint = shadowTint;
     shader.uniforms.uToonRim = rim;
-    shader.fragmentShader = shader.fragmentShader
-      .replace(PARS_ANCHOR, () => `${PARS_ANCHOR}\n${DEFINES}\n${PARS}`)
-      .replace(END_ANCHOR, () => MAIN);
+    const withPars = injectAt(shader.fragmentShader, PARS_ANCHOR, `${PARS_ANCHOR}\n${DEFINES}\n${PARS}`);
+    shader.fragmentShader = injectAt(withPars, END_ANCHOR, MAIN);
   };
   mat.customProgramCacheKey = () => 'sakura-toon-v1';
   return mat;

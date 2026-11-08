@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Fog, PerspectiveCamera, Scene, Vector2, type WebGLRenderer } from 'three';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { QUALITY_PROFILES } from '../../core/quality';
 import type { WorldContext } from '../../core/types';
@@ -69,6 +70,36 @@ describe('postfx feature', () => {
     ctx.renderer.render(ctx.scene, ctx.camera);
     expect(spy).toHaveBeenCalledTimes(1);
     expect(original).toHaveBeenCalledTimes(1);
+  });
+
+  it('creates bloom lazily and disposes it when disabled', async () => {
+    const ctx = mockCtx();
+    ctx.quality = QUALITY_PROFILES.low;
+    await postfx.init(ctx);
+    expect(bloomCount()).toBe(0);
+    postfx.setQuality!(QUALITY_PROFILES.medium);
+    const bloom = activeComposer()!.passes.find((p) => p instanceof UnrealBloomPass) as UnrealBloomPass;
+    const spy = vi.spyOn(bloom, 'dispose');
+    postfx.setQuality!(QUALITY_PROFILES.low);
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(bloomCount()).toBe(0);
+  });
+
+  it('renders through the camera passed to render()', async () => {
+    const ctx = mockCtx();
+    await postfx.init(ctx);
+    const composer = activeComposer()!;
+    const renderPass = composer.passes[0] as RenderPass;
+    vi.spyOn(composer, 'render').mockImplementation(() => {});
+    const other = new PerspectiveCamera();
+    ctx.renderer.render(ctx.scene, other);
+    expect(renderPass.camera).toBe(other);
+  });
+
+  it('resyncs on resize and orientationchange', async () => {
+    await postfx.init(mockCtx());
+    const add = (window.addEventListener as ReturnType<typeof vi.fn>).mock.calls.map((c) => c[0]);
+    expect(add).toEqual(expect.arrayContaining(['resize', 'orientationchange']));
   });
 
   it('sets linear fog from the quality view distance', async () => {

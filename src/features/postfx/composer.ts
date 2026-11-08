@@ -14,8 +14,8 @@ export const POSTFX_CONSTANTS = {
 
 export interface Postfx {
   composer: EffectComposer;
-  /** Composite one frame to the screen. */
-  render(): void;
+  /** Composite one frame to the screen through `camera`. */
+  render(camera: Camera): void;
   setBloom(on: boolean): void;
   /** Sync composer buffers to the renderer's current size and pixel ratio. */
   syncSize(): void;
@@ -28,7 +28,8 @@ export function createPostfx(renderer: WebGLRenderer, scene: Scene, camera: Came
   const clear = new Color();
   const composer = new EffectComposer(renderer);
   const { strength, radius, threshold } = POSTFX_CONSTANTS.bloom;
-  const bloom = new UnrealBloomPass(size.clone(), strength, radius, threshold);
+  // Created lazily on first enable and disposed on disable, so `low` never pays for its mip targets.
+  let bloom: UnrealBloomPass | null = null;
   const vignette = new ShaderPass({
     name: 'SakuraVignette',
     uniforms: {
@@ -41,20 +42,27 @@ export function createPostfx(renderer: WebGLRenderer, scene: Scene, camera: Came
   });
   const output = new OutputPass();
 
-  composer.addPass(new RenderPass(scene, camera));
+  const renderPass = new RenderPass(scene, camera);
+  composer.addPass(renderPass);
   composer.addPass(vignette);
   composer.addPass(output);
 
   const setBloom = (on: boolean): void => {
-    const has = composer.passes.includes(bloom);
-    if (on && !has) composer.insertPass(bloom, 1);
-    else if (!on && has) composer.removePass(bloom);
+    if (on && !bloom) {
+      bloom = new UnrealBloomPass(renderer.getSize(size).clone(), strength, radius, threshold);
+      composer.insertPass(bloom, 1);
+    } else if (!on && bloom) {
+      composer.removePass(bloom);
+      bloom.dispose();
+      bloom = null;
+    }
   };
   setBloom(bloomOn);
 
   return {
     composer,
-    render() {
+    render(cam) {
+      renderPass.camera = cam;
       // RenderPass clears with the GL clear state left by the last on-screen frame (sRGB-encoded).
       // Re-apply the clear colour while the linear read buffer is bound so the sky clear stays PALETTE-exact.
       const prev = renderer.getRenderTarget();
@@ -72,7 +80,7 @@ export function createPostfx(renderer: WebGLRenderer, scene: Scene, camera: Came
     },
     dispose() {
       for (const p of composer.passes) p.dispose();
-      if (!composer.passes.includes(bloom)) bloom.dispose();
+      bloom = null;
       composer.dispose();
     },
   };

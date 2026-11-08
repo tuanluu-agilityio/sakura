@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { createToonMaterial, fogRange, toonBand } from './toon';
+import { ShaderLib, type WebGLProgramParametersWithUniforms, type WebGLRenderer } from 'three';
+import { createToonMaterial, fogRange, injectAt, toonBand } from './toon';
 
 const samples = (n: number): number[] => Array.from({ length: n }, (_, i) => -1 + (2 * i) / (n - 1));
 
@@ -36,5 +37,20 @@ describe('fogRange', () => {
 describe('createToonMaterial', () => {
   it('tags the material as toon', () => {
     expect(createToonMaterial({ color: '#fff' }).userData.toon).toBe(true);
+  });
+});
+
+describe('toon shader patch', () => {
+  it('throws when an anchor is missing', () => {
+    expect(() => injectAt('void main() {}', '#include <lights_fragment_end>', 'x')).toThrow(/anchor missing/);
+  });
+
+  it('patches the physical fragment shader at both anchors', () => {
+    const mat = createToonMaterial({ color: '#fff' });
+    const shader = { uniforms: {}, fragmentShader: ShaderLib.physical.fragmentShader } as unknown as WebGLProgramParametersWithUniforms;
+    mat.onBeforeCompile(shader, {} as WebGLRenderer);
+    expect(shader.fragmentShader).toContain('#define RE_Direct RE_Direct_SakuraToon');
+    expect(shader.fragmentShader).toContain('sakuraRef');
+    expect(shader.uniforms).toHaveProperty('uToonShadowTint');
   });
 });
