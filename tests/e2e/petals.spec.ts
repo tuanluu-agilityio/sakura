@@ -22,7 +22,8 @@ test('petals fall in the air, lie on the ground and the wind gusts', async ({ pa
   page.on('pageerror', (e) => errors.push(e.message));
 
   await page.emulateMedia({ reducedMotion: 'no-preference' });
-  await page.goto('/?debug=1');
+  // An explicit level turns auto-downgrade off, otherwise a slow runner drops the later setQuality('high') to medium.
+  await page.goto('/?debug=1&quality=low');
   await expect
     .poll(() => page.evaluate(() => (window as any).__sakura?.ready), { timeout: 15_000 })
     .toBe(true);

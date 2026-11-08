@@ -59,7 +59,8 @@ async function boot(): Promise<void> {
   const updateDebug = createDebugOverlay(ctx, () => fps);
   const loop = createLoop((dt, elapsed) => {
     ctx.time.elapsed = elapsed;
-    if (dt > 0) fps = fps === 0 ? 1 / dt : fps * 0.9 + (1 / dt) * 0.1;
+    // Ignore sub-millisecond dt: the first rAF can land right after loop start and would seed fps with a huge 1/dt.
+    if (dt > 0.001) fps = fps === 0 ? 1 / dt : fps * 0.9 + (1 / dt) * 0.1;
     for (const f of features) f.update?.(dt, elapsed);
     ctx.endFrame();
     renderer.render(scene, camera);
