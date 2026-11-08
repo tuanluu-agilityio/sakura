@@ -30,17 +30,14 @@ void RE_Direct_SakuraToon( const in IncidentLight directLight, const in vec3 geo
 	#if NUM_DIR_LIGHTS > 0
 	for ( int i = 0; i < NUM_DIR_LIGHTS; i ++ ) sakuraRef += sakuraLum( directionalLights[ i ].color );
 	#endif
-	#ifdef NUM_SUN_LIGHTS
 	#if NUM_SUN_LIGHTS > 0
 	for ( int i = 0; i < NUM_SUN_LIGHTS; i ++ ) sakuraRef += sakuraLum( sunLights[ i ].color );
-	#endif
 	#endif
 	// k: 0 = fully shadowed / facing away, 1 = fully lit. No sun at all -> flat base colour.
 	float k = sakuraRef > 0.0 ? clamp( sakuraLit / sakuraRef, 0.0, 1.0 ) : 1.0;
 	float t = mix( TOON_L0, TOON_L2, k );
-	vec3 base = diffuseColor.rgb;
-	vec3 shade = mix( base, uToonShadowTint, TOON_SHADOW_MIX );
-	vec3 col = mix( shade, base, t );
+	// Banded base colour (floor TOON_L0, never black), pulled towards the lavender tint as light drops.
+	vec3 col = mix( diffuseColor.rgb * t, uToonShadowTint, TOON_SHADOW_MIX * ( 1.0 - k ) );
 	float rimF = pow( 1.0 - saturate( dot( geometryNormal, geometryViewDir ) ), TOON_RIM_POWER ) * TOON_RIM_STRENGTH;
 	col = mix( col, uToonRim, saturate( rimF ) * TOON_RIM_MIX );
 	reflectedLight.directDiffuse = col;
