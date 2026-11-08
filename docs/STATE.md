@@ -3,7 +3,7 @@ Milestone: M1
 Updated: 2026-11-08
 
 ## In progress
-- #17 M1-T8 integration (wt ../sakura-wt/17). All of #10-#16 merged (PRs 46-52). Ledger .superpowers/sdd/M1-static-scene/progress.md
+- #17 M1-T8 integration (wt ../sakura-wt/17) — paused by usage limit; resume or re-dispatch with brief .superpowers/sdd/M1-static-scene/M1-T8-brief.md. All of #10-#16 merged (PRs 46-52). Ledger .superpowers/sdd/M1-static-scene/progress.md
 
 ## Ready next
 - After #17 merges: `npm run tokens`, STATE → M2, human checkpoint (composite screenshots) before M2.
