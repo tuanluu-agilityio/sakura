@@ -10,12 +10,23 @@ const MAP: Record<string, MapEntry> = {
 
 describe('computeReady', () => {
   it('dep closed -> ready; dep open -> not ready; closed/in-progress excluded', () => {
-    const ready = computeReady(MAP, new Set([10]), new Set([13]));
-    expect(ready).toEqual(['M1-T2']); // T1 closed, T3 blocked by open T2, T4 in progress
+    const r = computeReady(MAP, new Set([10]), new Set([13]));
+    expect(r.ready).toEqual(['M1-T2']); // T1 closed, T3 blocked by open T2, T4 in progress
+    expect(r.warnings).toEqual([]);
   });
 
-  it('treats deps without an issue (bootstrap) as satisfied', () => {
-    expect(computeReady(MAP, new Set(), new Set())).toEqual(['M1-T1']);
+  it('treats unknown bootstrap deps (M<n>-B<n>) as satisfied, other unknown deps warn and block', () => {
+    expect(computeReady(MAP, new Set(), new Set()).ready).toEqual(['M1-T1']);
+    const m = { ...MAP, 'M1-T9': { issue: 19, depends: ['M7-T1'] } };
+    const r = computeReady(m, new Set([10]), new Set());
+    expect(r.ready).not.toContain('M1-T9');
+    expect(r.warnings).toEqual(['unknown dependency M7-T1 of M1-T9']);
+  });
+
+  it('restricts to the given milestone', () => {
+    const m = { ...MAP, 'M2-T1': { issue: 30, depends: [] as string[] } };
+    expect(computeReady(m, new Set(), new Set(), 'M2').ready).toEqual(['M2-T1']);
+    expect(computeReady(m, new Set(), new Set(), 'M1').ready).toEqual(['M1-T1']);
   });
 });
 

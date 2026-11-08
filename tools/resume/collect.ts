@@ -25,7 +25,7 @@ export interface Deps {
 }
 
 export const defaultRun: Runner = (cmd, args, cwd) => {
-  const r = spawnSync(cmd, args, { encoding: 'utf8', cwd, maxBuffer: 64 * 1024 * 1024 });
+  const r = spawnSync(cmd, args, { encoding: 'utf8', cwd, maxBuffer: 64 * 1024 * 1024, timeout: 10_000 });
   if (r.error) throw new Error(`${cmd} failed to start: ${r.error.message}`);
   if (r.status !== 0) throw new Error(`${cmd} ${args.slice(0, 2).join(' ')} exited ${r.status}: ${r.stderr.trim()}`);
   return r.stdout.trim();
@@ -46,24 +46,35 @@ export function defaultDeps(): Deps {
 }
 
 /**
- * Tasks that are ready: not closed, not in progress, and every dependency is a closed issue.
- * A dependency absent from the map (e.g. bootstrap tasks like M0-B0 that have no issue) counts as satisfied.
+ * Tasks that are ready: in the current milestone (when given), not closed, not in progress,
+ * and every dependency is a closed issue. A dependency missing from the map is satisfied only
+ * if it is a bootstrap id (M<n>-B<n>, no issue); any other unknown dependency yields a warning
+ * and keeps the task out of the ready list.
  */
 export function computeReady(
   map: Record<string, MapEntry>,
   closed: Set<number>,
   inProgress: Set<number>,
-): string[] {
-  const out: string[] = [];
+  milestone?: string,
+): { ready: string[]; warnings: string[] } {
+  const ready: string[] = [];
+  const warnings: string[] = [];
   for (const [id, e] of Object.entries(map)) {
+    if (milestone && !id.startsWith(`${milestone}-`)) continue;
     if (closed.has(e.issue) || inProgress.has(e.issue)) continue;
-    const ok = e.depends.every((d) => {
+    let ok = true;
+    for (const d of e.depends) {
       const dep = map[d];
-      return !dep || closed.has(dep.issue);
-    });
-    if (ok) out.push(id);
+      if (dep) {
+        if (!closed.has(dep.issue)) ok = false;
+      } else if (!/^M\d+-B\d+$/.test(d)) {
+        warnings.push(`unknown dependency ${d} of ${id}`);
+        ok = false;
+      }
+    }
+    if (ok) ready.push(id);
   }
-  return out;
+  return { ready, warnings };
 }
 
 function ciState(rollup: { status?: string; conclusion?: string }[] | undefined): string {
@@ -131,7 +142,13 @@ export function collect(deps: Deps = defaultDeps()): ResumeData {
       const rows = JSON.parse(deps.run('gh', ['issue', 'list', '--state', 'closed', '--limit', '1000', '--json', 'number'])) as { number: number }[];
       return new Set(rows.map((r) => r.number));
     }, null as Set<number> | null);
-    if (closed) data.ready = computeReady(map, closed, new Set(data.inProgress.map((i) => i.issue)));
+    if (closed) {
+      const milestone = /^Milestone:\s*(M\d+)/m.exec(data.state)?.[1];
+      if (!milestone) data.warnings.push('no Milestone: line in STATE.md; ready not filtered');
+      const r = computeReady(map, closed, new Set(data.inProgress.map((i) => i.issue)), milestone);
+      data.ready = r.ready;
+      data.warnings.push(...r.warnings);
+    }
   }
 
   return data;
